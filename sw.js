@@ -1,4 +1,4 @@
-const CACHE_NAME = 'exen-timer-cache-v3'; // Version erhöht, um Update zu erzwingen
+const CACHE_NAME = 'exen-timer-cache-v4'; // Version erhöht, um Update zu erzwingen
 const urlsToCache = [
   './',
   './index.html',
