@@ -4,7 +4,7 @@ Ein einfacher, aber leistungsstarker Timer für dynamische Schießdisziplinen, e
 
 ## Live-Demo
 
-**Hier Link zur Live-Demo einfügen:** [https://eXenInfo.github.io/exen-timer/](https://eXenInfo.github.io/exen-timer/)
+**Live-Demo:** [https://eXenInfo.github.io/exen-timer/](https://eXenInfo.github.io/exen-timer/)
 
 ---
 
@@ -37,7 +37,7 @@ Das Projekt ist sauber in die notwendigen Dateien für eine PWA aufgeteilt:
 
 1.  **Repository klonen oder herunterladen:**
     ```bash
-    git clone [https://github.com/DEIN-GITHUB-NAME/exen-timer.git](https://github.com/DEIN-GITHUB-NAME/exen-timer.git)
+    git clone [https://github.com/eXenInfo/exen-timer.git](https://github.com/eXenInfo/exen-timer.git)
     ```
 2.  **Icons ersetzen (Optional):** Ersetze die Platzhalter-Icons im `icons/`-Ordner durch deine eigenen Grafiken (192x192 und 512x512 Pixel).
 3.  **Live-Schalten:** Lade den gesamten Projektordner auf einen Webspace oder nutze GitHub Pages, um die App zu veröffentlichen.
