@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let timerState = 'idle'; // idle, prep, running, paused, rep_pause, finished
 
     let insertionIndex = -1;
+    let audioInitialized = false;
 
     // --- View Management ---
     function switchView(viewName) {
@@ -95,18 +96,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    navTimerBtn.addEventListener('click', () => switchView('timer'));
-    navAdminBtn.addEventListener('click', () => switchView('admin'));
-    navHelpBtn.addEventListener('click', () => switchView('help'));
+    navTimerBtn.addEventListener('click', () => { initAudio(); switchView('timer'); });
+    navAdminBtn.addEventListener('click', () => { initAudio(); switchView('admin'); });
+    navHelpBtn.addEventListener('click', () => { initAudio(); switchView('help'); });
 
     // --- Audio Context & Synth ---
     const initAudio = () => {
-        if (typeof Tone === 'undefined' || (Tone.context && Tone.context.state === 'running')) return;
-        Tone.start().catch(e => console.error("Tone.js start failed:", e));
+        if (audioInitialized || typeof Tone === 'undefined') return;
+        if (Tone.context.state !== 'running') {
+            Tone.start().then(() => {
+                console.log("AudioContext started successfully.");
+                audioInitialized = true;
+            }).catch(e => console.error("Tone.js start failed:", e));
+        } else {
+            audioInitialized = true;
+        }
     };
     
     const playSound = () => {
-        if (typeof Tone === 'undefined' || !Tone.context || Tone.context.state !== 'running') return;
+        if (!audioInitialized) {
+            console.warn("Audio not initialized. User interaction needed.");
+            return;
+        }
         try {
             const soundSynth = new Tone.Synth({
                 oscillator: { type: "fatsquare", count: 3, spread: 40 },
