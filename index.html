@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="de" class="h-screen">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>eXen-Timer</title>
+
+    <!-- PWA-Konfiguration -->
+    <meta name="theme-color" content="#1f2937"/>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <!-- Styles und Schriften -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white h-full flex flex-col antialiased">
+
+    <div id="app-container" class="flex-grow flex flex-col min-h-0">
+        <!-- Navigation -->
+        <div class="p-2 flex-shrink-0 bg-gray-800">
+            <div class="flex justify-center rounded-lg bg-gray-700 p-1 md:max-w-md mx-auto">
+                <button id="nav-timer" class="nav-btn w-full py-2 px-4 rounded-md font-bold transition-colors active">Timer</button>
+                <button id="nav-admin" class="nav-btn w-full py-2 px-4 rounded-md font-bold transition-colors">Admin</button>
+                <button id="nav-help" class="nav-btn w-full py-2 px-4 rounded-md font-bold transition-colors">Hilfe</button>
+            </div>
+        </div>
+
+        <!-- Timer View -->
+        <div id="timer-view" class="flex flex-col flex-grow min-h-0 md:max-w-2xl md:mx-auto w-full">
+            <div class="p-4 flex-shrink-0">
+                <div class="bg-gray-800 rounded-xl p-4 md:p-6 text-center shadow-lg">
+                    <p id="live-stage-name" class="text-xl md:text-3xl font-bold text-amber-400 mb-2 h-auto min-h-[72px] flex items-center justify-center stage-name-display break-word">Disziplin laden...</p>
+                    <p id="live-timer-display" class="timer-display text-7xl md:text-8xl lg:text-9xl text-gray-100">00:00</p>
+                    <p id="live-total-progress" class="text-gray-400 mt-2 h-6">Bitte im Admin-Bereich eine Disziplin laden.</p>
+                </div>
+                <div id="live-controls-container" class="my-4 flex justify-center items-center gap-4 px-4">
+                    <button id="live-start-btn" class="w-full max-w-xs bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors">Start</button>
+                    <button id="live-reset-btn" class="w-full max-w-xs bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors hidden">Reset</button>
+                </div>
+            </div>
+
+            <div class="flex-grow overflow-y-auto custom-scrollbar px-4 pb-4">
+                <div class="bg-gray-800 rounded-xl p-4">
+                    <div class="mb-3">
+                         <h2 class="text-xl font-bold text-gray-200">Aktuelle Disziplin</h2>
+                         <p id="live-discipline-name" class="text-amber-500 font-semibold text-lg break-word">-</p>
+                    </div>
+                    <div id="live-stages-list" class="space-y-2">
+                        <!-- Stages will be rendered here by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="admin-view" class="hidden flex-col flex-grow min-h-0 md:max-w-2xl md:mx-auto w-full p-4 overflow-y-auto custom-scrollbar">
+            <div class="bg-gray-800 rounded-xl p-4">
+                <div class="mb-4 pb-4 border-b border-gray-700">
+                    <h2 class="text-xl font-bold mb-3 text-gray-200">Disziplin-Verwaltung</h2>
+                    <select id="admin-discipline-select" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-2 w-full mb-3"></select>
+                    <div class="grid grid-cols-3 gap-3">
+                         <button id="admin-load-btn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow-md">Laden</button>
+                         <button id="admin-export-single-btn" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded-lg shadow-md">Kopieren</button>
+                         <button id="admin-delete-btn" class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md">Löschen</button>
+                    </div>
+                </div>
+
+                <div class="mb-4 pb-4 border-b border-gray-700">
+                    <h2 class="text-xl font-bold mb-3 text-gray-200">Sammlung Teilen / Sichern</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button id="export-all-btn" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded-lg shadow-md">Sammlung kopieren</button>
+                        <button id="import-btn" class="bg-teal-600 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded-lg shadow-md">Aus Text einfügen</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-3 text-gray-200">Disziplin-Editor (<span id="editing-discipline-name" class="text-amber-400">Neue Disziplin</span>)</h2>
+                    <div id="admin-stages-list" class="space-y-1 mb-4"></div>
+                    <div id="add-stage-form-container" class="pt-4 border-t border-gray-700">
+                        <h3 class="font-bold text-lg mb-2 text-gray-300">Neue Phase hinzufügen</h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <textarea id="new-stage-name" placeholder="Beschreibung der Phase (mehrzeilig)" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-2" rows="3"></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mt-3">
+                            <input type="number" id="new-stage-prep-time" placeholder="Vorlaufzeit (s)" min="0" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-2">
+                            <input type="number" id="new-stage-duration" placeholder="Dauer (s)" min="1" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-2">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mt-3">
+                            <input type="number" id="new-stage-reps" placeholder="Wiederholungen" min="1" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-2">
+                            <input type="number" id="new-stage-pause" placeholder="Pause zw. Wdh. (s)" min="0" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-2">
+                        </div>
+                         <div class="grid grid-cols-2 gap-3 mt-3">
+                            <div class="flex items-center bg-gray-700 border border-gray-600 rounded-lg p-2"><input type="checkbox" id="new-stage-sound-start" class="h-5 w-5 bg-gray-700 rounded text-amber-500 focus:ring-amber-400"><label for="new-stage-sound-start" class="ml-2 text-gray-300 text-sm">Ton am Anfang</label></div>
+                            <div class="flex items-center bg-gray-700 border border-gray-600 rounded-lg p-2"><input type="checkbox" id="new-stage-sound-end" class="h-5 w-5 bg-gray-700 rounded text-amber-500 focus:ring-amber-400" checked><label for="new-stage-sound-end" class="ml-2 text-gray-300 text-sm">Ton am Ende</label></div>
+                        </div>
+                         <div class="flex items-center mt-3 bg-gray-700 border border-gray-600 rounded-lg p-2"><input type="checkbox" id="new-stage-pause-after" class="h-5 w-5 bg-gray-700 rounded text-amber-500 focus:ring-amber-400"><label for="new-stage-pause-after" class="ml-2 text-gray-300">Pause nach Phase</label></div>
+                        <button id="add-stage-btn" class="mt-3 w-full bg-amber-500 hover:bg-amber-400 text-gray-900 font-bold py-2 px-4 rounded-lg">Phase zum Ablauf hinzufügen</button>
+                        
+                        <div class="mt-6">
+                            <h3 class="font-bold text-lg mb-2 text-gray-300">Ablauf speichern</h3>
+                            <div class="flex gap-3">
+                                <input type="text" id="discipline-name-input" placeholder="Name für Disziplin" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-2 w-full">
+                                <button id="save-discipline-btn" class="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg">Speichern</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help View -->
+        <div id="help-view" class="hidden flex-col h-full md:max-w-2xl md:mx-auto w-full p-4 overflow-y-auto custom-scrollbar">
+            <div class="bg-gray-800 rounded-xl p-6 prose prose-invert max-w-none prose-h1:text-amber-400 prose-h3:text-amber-300 prose-strong:text-white">
+                <h1>Anleitung für den eXen-Timer</h1>
+                 <p>Dieser Timer wurde von Thomas Köhler - eXen.Info mit Hilfe von Google Gemini entwickelt, um dir das Training und die Durchführung der dynamischen BDMP-Disziplinen zu vereinfachen.</p>
+                <hr>
+                <h3>Timer-Ansicht: Eine Disziplin durchführen</h3>
+                <ol>
+                    <li><strong>Disziplin laden:</strong> Wechsle zur "Admin"-Ansicht, wähle eine Disziplin und klicke auf <strong>"Laden"</strong>.</li>
+                    <li><strong>Ablauf starten:</strong> Klicke auf <strong>"Start"</strong>.</li>
+                     <li><strong>Einzelne Phase starten:</strong> Klicke in der Liste auf das grüne <strong>Play-Symbol (▶)</strong>.</li>
+                </ol>
+                <hr>
+                <h3>Admin-Ansicht: Disziplinen verwalten</h3>
+                 <ol>
+                    <li><strong>Ablauf bearbeiten:</strong> Wähle eine Disziplin aus der Liste. Der Ablauf erscheint im "Disziplin-Editor".</li>
+                    <li><strong>Disziplinen teilen (Kopieren/Einfügen):</strong>
+                        <ul>
+                            <li><strong>Kopieren:</strong> Wähle eine Disziplin und klicke auf <strong>"Kopieren"</strong> oder sichere mit <strong>"Sammlung kopieren"</strong> alle.</li>
+                            <li><strong>Einfügen:</strong> Klicke auf <strong>"Aus Text einfügen"</strong>, füge die Daten ein und klicke auf "Importieren".</li>
+                        </ul>
+                    </li>
+                </ol>
+                 <hr>
+                <h3>Wichtiger Hinweis zur Lautstärke</h3>
+                <p>Für den Einsatz am Schießstand, insbesondere bei der Verwendung von Gehörschutz, empfehlen wir dringend, das Smartphone oder Tablet mit einem externen Bluetooth-Lautsprecher zu verbinden. Dies stellt sicher, dass das Start- und Endsignal für alle Teilnehmer laut und deutlich hörbar ist.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="text-center text-xs text-gray-500 p-4 flex-shrink-0">
+        <p>(C) Thomas Köhler - <a href="https://exen.info/" target="_blank" rel="noopener noreferrer" class="hover:underline text-amber-400">eXen.Info</a> | 
+        <a href="https://paypal.me/exen" target="_blank" rel="noopener noreferrer" class="hover:underline text-amber-400">Ein Dankeschön senden (PayPal)</a>
+        </p>
+    </footer>
+
+    <!-- Modals -->
+    <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+        <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6">
+            <h3 class="font-bold text-2xl mb-4 text-white">Phase bearbeiten</h3>
+            <input type="hidden" id="edit-stage-index">
+            <div class="space-y-4">
+                <textarea id="edit-stage-name" placeholder="Beschreibung der Phase" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-3 w-full" rows="3"></textarea>
+                <input type="number" id="edit-stage-prep-time" placeholder="Vorlaufzeit (s)" min="0" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-3 w-full">
+                <input type="number" id="edit-stage-duration" placeholder="Dauer (s)" min="1" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-3 w-full">
+                <input type="number" id="edit-stage-reps" placeholder="Wiederholungen" min="1" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-3 w-full">
+                <input type="number" id="edit-stage-pause" placeholder="Pause zw. Wdh. (s)" min="0" class="bg-gray-700 border border-gray-600 text-white rounded-lg p-3 w-full">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center bg-gray-700 rounded-lg p-3"><input type="checkbox" id="edit-stage-sound-start" class="h-5 w-5 bg-gray-700 rounded text-amber-500 focus:ring-amber-400"><label for="edit-stage-sound-start" class="ml-3 text-gray-300">Ton am Anfang</label></div>
+                    <div class="flex items-center bg-gray-700 rounded-lg p-3"><input type="checkbox" id="edit-stage-sound-end" class="h-5 w-5 bg-gray-700 rounded text-amber-500 focus:ring-amber-400"><label for="edit-stage-sound-end" class="ml-3 text-gray-300">Ton am Ende</label></div>
+                </div>
+                <div class="flex items-center bg-gray-700 rounded-lg p-3"><input type="checkbox" id="edit-stage-pause-after" class="h-5 w-5 bg-gray-700 rounded text-amber-500 focus:ring-amber-400"><label for="edit-stage-pause-after" class="ml-3 text-gray-300">Pause nach Phase</label></div>
+            </div>
+            <div class="mt-6 grid grid-cols-2 gap-4">
+                <button id="cancel-edit-btn" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-lg">Abbrechen</button>
+                <button id="save-edit-btn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg">Speichern</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="import-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+        <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6">
+            <h3 class="font-bold text-2xl mb-4 text-white">Aus Text einfügen</h3>
+            <p class="text-gray-400 mb-3 text-sm">Fügen Sie hier die Daten einer oder mehrerer Disziplinen ein, die Sie zuvor kopiert haben.</p>
+            <textarea id="import-text-area" placeholder="Hier die kopierten Daten einfügen..." class="bg-gray-700 border border-gray-600 text-white rounded-lg p-3 w-full h-40"></textarea>
+            <div class="mt-6 grid grid-cols-2 gap-4">
+                <button id="cancel-import-btn" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-lg">Abbrechen</button>
+                <button id="process-import-btn" class="bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 px-4 rounded-lg">Importieren</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Externe und lokale Skripte -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
