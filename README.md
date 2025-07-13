@@ -4,7 +4,7 @@ Ein einfacher, aber leistungsstarker Timer für dynamische Schießdisziplinen, e
 
 ## Live-Demo
 
-**Live-Demo:** [https://eXenInfo.github.io/exen-timer/](https://eXenInfo.github.io/exen-timer/)
+**Live-Demo:** [https://exeninfo.github.io/eXen-Timer/
 
 ---
 
