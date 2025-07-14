@@ -507,4 +507,245 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             localStorage.setItem('bdmpTimerDisciplines', JSON.stringify(disciplines));
             localStorage.setItem('bdmpTimerActiveDiscipline', activeDisciplineName);
-        } catch (e
+        } catch (e) {
+            console.error("Failed to save to localStorage", e);
+            alert("Fehler beim Speichern der Daten. Der Speicher könnte voll sein.");
+        }
+    };
+    const loadDisciplinesFromStorage = () => {
+        const stored = localStorage.getItem('bdmpTimerDisciplines');
+        if (stored) {
+            try {
+                disciplines = JSON.parse(stored);
+            } catch {
+                disciplines = {};
+            }
+        } else {
+            disciplines = {}; // Start with no defaults, user must load them.
+        }
+        const lastActive = localStorage.getItem('bdmpTimerActiveDiscipline');
+        if (lastActive && disciplines[lastActive]) {
+            loadDisciplineForTimer(lastActive, false);
+        }
+        renderDisciplineSelector();
+    };
+    function handleSaveDiscipline() {
+        const name = disciplineNameInput.value.trim();
+        if (!name) { alert("Bitte geben Sie einen Namen an."); return; }
+        if (editorStages.length === 0) { alert("Ablauf ist leer und kann nicht gespeichert werden."); return; }
+        if (disciplines[name] && disciplineNameInput.value !== adminDisciplineSelect.value) {
+            if (!confirm(`Die Disziplin "${name}" existiert bereits. Möchten Sie sie überschreiben?`)) {
+                return;
+            }
+        }
+        disciplines[name] = JSON.parse(JSON.stringify(editorStages));
+        saveDisciplinesToStorage();
+        renderDisciplineSelector();
+        adminDisciplineSelect.value = name;
+        alert(`Disziplin "${name}" wurde gespeichert!`);
+    }
+    function handleDeleteDiscipline() {
+        const name = adminDisciplineSelect.value;
+        if (disciplines[name] && confirm(`Disziplin "${name}" wirklich löschen? Dies kann nicht rückgängig gemacht werden.`)) {
+            delete disciplines[name];
+            if (activeDisciplineName === name) {
+                activeDisciplineName = '';
+                liveStages = [];
+                resetCurrentDiscipline();
+                renderLiveStagesList();
+                liveDisciplineName.textContent = '-';
+            }
+            if (disciplineNameInput.value === name) {
+                editorStages = [];
+                disciplineNameInput.value = '';
+                editingDisciplineName.textContent = 'Neue Disziplin';
+                renderAdminStagesList();
+            }
+            saveDisciplinesToStorage();
+            renderDisciplineSelector();
+        }
+    }
+    function loadDisciplineForEditor(name) {
+        if (disciplines[name]) {
+            editorStages = JSON.parse(JSON.stringify(disciplines[name]));
+            disciplineNameInput.value = name;
+            editingDisciplineName.textContent = name;
+            insertionIndex = editorStages.length;
+            renderAdminStagesList();
+        }
+    }
+    function loadDisciplineForTimer(name, doSwitchView = true) {
+        if (disciplines[name]) {
+            liveStages = JSON.parse(JSON.stringify(disciplines[name]));
+            activeDisciplineName = name;
+            liveDisciplineName.textContent = name;
+            saveDisciplinesToStorage();
+            renderLiveStagesList();
+            resetCurrentDiscipline();
+            if (doSwitchView) {
+                switchView('timer');
+            }
+        } else {
+            alert(`Disziplin "${name}" konnte nicht gefunden werden.`);
+        }
+    }
+    
+    // --- Import / Export via Clipboard ---
+    function copyToClipboard(text, successMessage) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed"; 
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            alert(successMessage);
+        } catch (err) {
+            console.error('Fehler beim Kopieren in die Zwischenablage: ', err);
+            alert('Kopieren fehlgeschlagen. Bitte manuell kopieren.');
+        }
+        document.body.removeChild(textArea);
+    }
+    function handleExportAll() {
+        if (Object.keys(disciplines).length === 0) {
+            alert("Keine Disziplinen zum Kopieren vorhanden.");
+            return;
+        }
+        const dataStr = JSON.stringify(disciplines, null, 2);
+        copyToClipboard(dataStr, "Die gesamte Sammlung wurde in die Zwischenablage kopiert.");
+    }
+    function handleExportSingle() {
+        const name = adminDisciplineSelect.value;
+        if (!disciplines[name]) {
+            alert("Bitte wählen Sie eine gültige Disziplin zum Kopieren aus.");
+            return;
+        }
+        const singleDiscipline = { [name]: disciplines[name] };
+        const dataStr = JSON.stringify(singleDiscipline, null, 2);
+        copyToClipboard(dataStr, `Disziplin "${name}" wurde in die Zwischenablage kopiert.`);
+    }
+    function handleImport() {
+        importTextArea.value = '';
+        importModal.classList.remove('hidden');
+    }
+    function processImportFromText() {
+        const importedData = importTextArea.value;
+        if (!importedData.trim()) {
+            alert("Das Textfeld ist leer. Bitte fügen Sie Daten ein.");
+            return;
+        }
+        try {
+            const importedDisciplines = JSON.parse(importedData);
+            let importedCount = 0;
+            let overwrittenCount = 0;
+            for (const name in importedDisciplines) {
+                if (Object.prototype.hasOwnProperty.call(importedDisciplines, name) && Array.isArray(importedDisciplines[name])) {
+                    if (disciplines[name]) {
+                        if (confirm(`Disziplin "${name}" existiert bereits. Möchten Sie sie mit der importierten Version überschreiben?`)) {
+                            disciplines[name] = importedDisciplines[name];
+                            overwrittenCount++;
+                        }
+                    } else {
+                        disciplines[name] = importedDisciplines[name];
+                        importedCount++;
+                    }
+                }
+            }
+            if (importedCount > 0 || overwrittenCount > 0) {
+                saveDisciplinesToStorage();
+                renderDisciplineSelector();
+                loadDisciplineForEditor(adminDisciplineSelect.value);
+                alert(`${importedCount} Disziplin(en) neu importiert, ${overwrittenCount} überschrieben.`);
+            } else {
+                alert("Keine neuen oder zu überschreibenden Disziplinen in den Daten gefunden.");
+            }
+        } catch (e) {
+            alert("Fehler beim Verarbeiten der Daten. Stellen Sie sicher, dass der Text das korrekte Format hat.");
+            console.error(e);
+        } finally {
+            importModal.classList.add('hidden');
+        }
+    }
+
+    // --- Standard-Disziplinen vom Server laden ---
+    async function loadDisciplinesFromServer() {
+        if (!confirm("Möchten Sie die Standard-Disziplinen laden? Bestehende Disziplinen mit gleichem Namen werden überschrieben.")) {
+            return;
+        }
+        try {
+            const response = await fetch('disziplinen.txt');
+            if (!response.ok) {
+                throw new Error(`Netzwerk-Fehler: Die Datei konnte nicht gefunden werden (Status: ${response.status})`);
+            }
+            const serverDisciplines = await response.json();
+            let importedCount = 0;
+            let overwrittenCount = 0;
+            for (const name in serverDisciplines) {
+                if (disciplines[name]) {
+                    overwrittenCount++;
+                } else {
+                    importedCount++;
+                }
+                disciplines[name] = serverDisciplines[name];
+            }
+            if (importedCount > 0 || overwrittenCount > 0) {
+                saveDisciplinesToStorage();
+                renderDisciplineSelector();
+                loadDisciplineForEditor(adminDisciplineSelect.value);
+                alert(`${importedCount} neue Disziplin(en) importiert und ${overwrittenCount} bestehende überschrieben.`);
+            } else {
+                alert("Keine neuen Disziplinen zum Importieren gefunden.");
+            }
+        } catch (error) {
+            console.error('Fehler beim Laden der Standard-Disziplinen:', error);
+            alert('Fehler: Die Disziplinen konnten nicht geladen werden. Prüfen Sie, ob die "disziplinen.txt" gültiges JSON enthält.');
+        }
+    }
+    
+    // --- Event Listeners ---
+    document.body.addEventListener('click', oneTimeAudioInit);
+    document.body.addEventListener('touchend', oneTimeAudioInit);
+    navTimerBtn.addEventListener('click', () => switchView('timer'));
+    navAdminBtn.addEventListener('click', () => switchView('admin'));
+    navHelpBtn.addEventListener('click', () => switchView('help'));
+    liveStartBtn.addEventListener('click', startTimer);
+    liveResetBtn.addEventListener('click', resetCurrentDiscipline);
+    liveStagesListContainer.addEventListener('click', (event) => {
+        const startButton = event.target.closest('button[data-action="start-from"]');
+        if (startButton) {
+            initAudio();
+            const index = parseInt(startButton.dataset.index, 10);
+            if (!isNaN(index)) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                prepareStage(index);
+            }
+        }
+    });
+    addStageBtn.addEventListener('click', addStage);
+    saveDisciplineBtn.addEventListener('click', handleSaveDiscipline);
+    adminLoadBtn.addEventListener('click', () => loadDisciplineForTimer(adminDisciplineSelect.value));
+    adminExportSingleBtn.addEventListener('click', handleExportSingle);
+    adminDisciplineSelect.addEventListener('change', () => loadDisciplineForEditor(adminDisciplineSelect.value));
+    adminDeleteBtn.addEventListener('click', handleDeleteDiscipline);
+    saveEditBtn.addEventListener('click', handleUpdateStage);
+    cancelEditBtn.addEventListener('click', closeEditModal);
+    exportAllBtn.addEventListener('click', handleExportAll);
+    importBtn.addEventListener('click', handleImport);
+    cancelImportBtn.addEventListener('click', () => importModal.classList.add('hidden'));
+    processImportBtn.addEventListener('click', processImportFromText);
+    if(loadFromServerBtn) {
+        loadFromServerBtn.addEventListener('click', loadDisciplinesFromServer);
+    }
+
+    // --- Initial Load ---
+    loadDisciplinesFromStorage();
+    updateUiForStateChange();
+    if (Object.keys(disciplines).length > 0) {
+        loadDisciplineForEditor(adminDisciplineSelect.value);
+    } else {
+        renderAdminStagesList();
+    }
+});
