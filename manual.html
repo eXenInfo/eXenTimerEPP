@@ -6,79 +6,111 @@
     <title>Benutzerhandbuch: eXen-Timer</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Manuelles Hinzufügen einiger grundlegender Stile, falls 'prose' nicht ausreicht */
-        body { background-color: #f5f5f4; }
-        h1, h2, h3 { font-weight: bold; }
-        h1 { font-size: 1.875rem; margin-bottom: 1rem; }
-        h2 { font-size: 1.5rem; margin-bottom: 1rem; margin-top: 2rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;}
-        h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
-        p, ul, ol { margin-bottom: 1rem; line-height: 1.6; }
+        /* Manuelle Stile für eine saubere Darstellung des Handbuchs */
+        body { background-color: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; line-height: 1.6; }
+        .container { max-width: 800px; margin: auto; padding: 1.5rem; }
+        h1, h2, h3 { font-weight: 700; color: #0f172a; }
+        h1 { font-size: 2.25rem; margin-bottom: 1rem; text-align: center; }
+        h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+        h3 { font-size: 1.25rem; margin-top: 2rem; margin-bottom: 0.75rem; color: #334155; }
+        p, ul, ol { margin-bottom: 1rem; }
         ul, ol { padding-left: 1.5rem; }
         li { margin-bottom: 0.5rem; }
-        a { color: #2563eb; }
+        a { color: #f59e0b; font-weight: 600; }
         a:hover { text-decoration: underline; }
-        strong { font-weight: bold; }
-        .container { max-width: 800px; margin: auto; padding: 2rem; }
-        .card { background-color: white; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; }
+        code, .code { background-color: #e2e8f0; color: #475569; padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-family: monospace; }
+        .card { background-color: white; border-radius: 0.75rem; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); }
+        .button-like { display: inline-block; color: white; font-weight: bold; padding: 0.25rem 0.75rem; border-radius: 0.375rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+        .bg-green { background-color: #16a34a; }
+        .bg-blue { background-color: #2563eb; }
+        .bg-red { background-color: #dc2626; }
     </style>
 </head>
-<body class="bg-stone-100 text-stone-800">
+<body>
 
     <div class="container">
         <header class="text-center mb-8">
-            <h1 class="text-stone-900">Benutzerhandbuch: eXen-Timer</h1>
-            <p class="text-lg text-stone-600">Eine vollständige Anleitung zur Nutzung aller Funktionen.</p>
-            <a href="index.html" class="text-blue-600">&laquo; Zurück zum Timer</a>
+            <h1>Benutzerhandbuch: eXen-Timer</h1>
+            <p class="text-lg text-slate-600">Eine vollständige Anleitung zur Nutzung aller Funktionen.</p>
+            <a href="index.html">&laquo; Zurück zum Timer</a>
         </header>
 
-        <main>
-            <section id="einfuehrung" class="card">
-                <h2>Einführung</h2>
-                <p>Herzlich willkommen zum eXen-Timer! Dieser Timer wurde entwickelt, um dir das Training und die Durchführung der dynamischen BDMP-Disziplinen zu vereinfachen.</p>
-            </section>
+        <section id="einfuehrung" class="card">
+            <h2>Einführung</h2>
+            <p>Herzlich willkommen zum eXen-Timer! Dieser Timer wurde speziell für die Anforderungen der dynamischen Schießdisziplinen des BDMP entwickelt. Er hilft Ihnen, Trainingsabläufe präzise zu steuern, eigene Disziplinen zu erstellen und diese einfach mit anderen zu teilen.</p>
+            <p>Die App besteht aus drei Hauptbereichen: <strong>Timer</strong>, <strong>Admin</strong> und <strong>Hilfe</strong>.</p>
+        </section>
 
-            <section id="timer-ansicht" class="card">
-                <h2>Die Timer-Ansicht</h2>
-                <p>Die Timer-Ansicht ist bewusst einfach gehalten, um am Schießstand eine schnelle und fehlerfreie Bedienung zu gewährleisten.</p>
-                <h3>1. Disziplin vorbereiten</h3>
-                <ol>
-                    <li>Wechsle zur <strong>Admin</strong>-Ansicht.</li>
-                    <li>Wähle die gewünschte Disziplin aus der Dropdown-Liste.</li>
-                    <li>Klicke auf den blauen Knopf <strong>"Laden"</strong>. Die App wechselt automatisch zur Timer-Ansicht.</li>
-                </ol>
-                <h3>2. Ablauf starten und steuern</h3>
-                 <ul>
-                    <li><strong>Starten:</strong> Klicke auf den grünen <strong>Start</strong>-Knopf.</li>
-                    <li><strong>Pausieren:</strong> Wenn eine Pause nach einer Phase aktiviert ist, erscheint ein <strong>Weiter</strong>-Knopf.</li>
-                    <li><strong>Abbrechen:</strong> Mit dem roten <strong>Reset</strong>-Knopf kann der laufende Ablauf jederzeit abgebrochen und auf den Anfang zurückgesetzt werden.</li>
-                </ul>
-            </section>
+        <section id="timer-ansicht" class="card">
+            <h2>Die Timer-Ansicht</h2>
+            <p>Dies ist Ihre Kommandozentrale am Schießstand. Die Ansicht ist bewusst minimalistisch gehalten, um eine schnelle und fehlerfreie Bedienung zu gewährleisten.</p>
             
-            <section id="admin-ansicht" class="card">
-                <h2>Die Admin-Ansicht</h2>
-                <p>Hier verwaltest du alles: Du erstellst neue Disziplinen, bearbeitest bestehende und teilst deine Abläufe mit anderen Schützen.</p>
-                <h3>Der Disziplin-Editor</h3>
-                <ul>
-                    <li><strong>Bearbeiten:</strong> Klicke auf den Text einer Phase, um sie zu bearbeiten.</li>
-                    <li><strong>Reihenfolge ändern:</strong> Nutze die Pfeil-Knöpfe (▲/▼).</li>
-                    <li><strong>Duplizieren/Löschen:</strong> Nutze die entsprechenden Symbole rechts neben jeder Phase.</li>
-                </ul>
-                <h3>Import & Export</h3>
-                <p>Nutze die Kopieren- und Einfügen-Buttons, um deine Disziplin-Sammlung als Text zu sichern oder von anderen zu importieren.</p>
-            </section>
+            <h3>1. Eine Disziplin durchführen</h3>
+            <ol>
+                <li><strong>Disziplin laden:</strong> Wechseln Sie zuerst in die "Admin"-Ansicht. Wählen Sie eine Disziplin aus der Liste aus und klicken Sie auf den <span class="button-like bg-blue">Laden</span>-Knopf. Die App wechselt automatisch zurück in die Timer-Ansicht.</li>
+                <li><strong>Ablauf starten:</strong> Klicken Sie auf den großen grünen <span class="button-like bg-green">Start</span>-Knopf, um die erste Phase zu beginnen.</li>
+                <li><strong>Pausen & Nächste Phase:</strong> Wenn eine Phase die Option "Pause nachher" aktiviert hat, hält der Timer an und zeigt einen <span class="button-like bg-blue">Weiter</span>-Knopf. Ein Klick darauf bereitet die nächste Phase vor, die Sie dann wieder mit "Start" auslösen.</li>
+                <li><strong>Reset:</strong> Ein Klick auf den roten <span class="button-like bg-red">Reset</span>-Knopf bricht den gesamten Ablauf sofort ab und setzt die Disziplin auf den Anfang der ersten Phase zurück.</li>
+            </ol>
 
-            <section id="smartphone-tipp" class="card">
-                <h2>Tipp für Smartphone-Nutzer</h2>
-                <p>Füge die App zu deinem Startbildschirm hinzu, um sie wie eine native App schnell und auch offline nutzen zu können.</p>
-                <ul>
-                    <li><strong>iPhone (Safari):</strong> "Teilen"-Symbol &rarr; "Zum Home-Bildschirm".</li>
-                    <li><strong>Android (Chrome):</strong> Menü (drei Punkte) &rarr; "Zum Startbildschirm hinzufügen".</li>
-                </ul>
-            </section>
-        </main>
+            <h3>2. Einzelne Phasen trainieren</h3>
+            <p>Sie müssen nicht immer den gesamten Ablauf starten. In der Liste der Phasen unter dem Timer finden Sie neben jeder Phase ein Play-Symbol (▶). Ein Klick darauf setzt den Timer direkt an den Anfang dieser spezifischen Phase. So können Sie gezielt einzelne Übungen wiederholen.</p>
+        </section>
         
-        <footer class="text-center mt-8 text-stone-500">
-            <p>Viel Erfolg und Gut Schuss!</p>
+        <section id="admin-ansicht" class="card">
+            <h2>Die Admin-Ansicht</h2>
+            <p>Hier verwalten Sie Ihre Inhalte. Sie können Disziplinen bearbeiten, neue erstellen, importieren und exportieren.</p>
+
+            <h3>1. Disziplin-Verwaltung</h3>
+            <ul>
+                <li><strong>Laden:</strong> Überträgt die ausgewählte Disziplin in die Timer-Ansicht und macht sie startklar.</li>
+                <li><strong>Kopieren:</strong> Kopiert die Daten der ausgewählten Disziplin als Text (im JSON-Format) in Ihre Zwischenablage.</li>
+                <li><strong>Löschen:</strong> Entfernt die ausgewählte Disziplin dauerhaft aus dem Speicher Ihres Geräts.</li>
+            </ul>
+
+            <h3>2. Sammlung Teilen / Sichern</h3>
+            <ul>
+                <li><strong>Sammlung kopieren:</strong> Kopiert **alle** Ihre gespeicherten Disziplinen in die Zwischenablage. Ideal für ein komplettes Backup.</li>
+                <li><strong>Aus Text einfügen:</strong> Öffnet ein Fenster, in das Sie zuvor kopierte Disziplin-Daten einfügen können, um sie zu importieren.</li>
+            </ul>
+
+            <h3>3. Standard-Satz laden</h3>
+            <p>Ein Klick auf <span class="button-like bg-green">BDMP-Standard laden</span> lädt eine von uns kuratierte Liste von Standard-Disziplinen direkt vom Server in Ihre App. Bestehende Disziplinen mit gleichem Namen werden dabei überschrieben.</p>
+
+            <h3>4. Der Disziplin-Editor: Eigene Abläufe erstellen</h3>
+            <p>Hier liegt das Herzstück der App. Wenn Sie eine Disziplin aus der Liste auswählen, wird sie im Editor geladen. Sie können aber auch eine komplett neue erstellen.</p>
+            
+            <h4>Phasen bearbeiten & verwalten</h4>
+            <ul>
+                <li><strong>Bearbeiten:</strong> Klicken Sie direkt auf den Text einer Phase, um sie im "Phase bearbeiten"-Fenster anzupassen.</li>
+                <li><strong>Verschieben:</strong> Nutzen Sie die Pfeil-Knöpfe (▲/▼) rechts, um die Reihenfolge der Phasen zu ändern.</li>
+                <li><strong>Duplizieren (❐):</strong> Erstellt eine Kopie einer Phase direkt darunter.</li>
+                <li><strong>Löschen (❌):</strong> Entfernt eine Phase.</li>
+            </ul>
+
+            <h4>Bedeutung der Felder für eine Phase</h4>
+            <ul>
+                <li><strong>Beschreibung:</strong> Der Name oder die Anweisung für die Phase. Zeilenumbrüche werden im Timer korrekt dargestellt.</li>
+                <li><strong>Vorlaufzeit (s):</strong> Eine Vorbereitungszeit in Sekunden, bevor die eigentliche Dauer startet (z. B. für das Kommando "Fertig?").</li>
+                <li><strong>Dauer (s):</strong> Die Hauptzeit der Übung in Sekunden.</li>
+                <li><strong>Wiederholungen:</strong> Wie oft diese Phase hintereinander ausgeführt werden soll.</li>
+                <li><strong>Pause zw. Wdh. (s):</strong> Eine kurze Pause in Sekunden zwischen den einzelnen Wiederholungen.</li>
+                <li><strong>Ton am Anfang / Ende:</strong> Legt fest, ob zu Beginn oder am Ende der Dauer (oder beidem) ein Signalton ertönen soll.</li>
+                <li><strong>Pause nach Phase:</strong> Wenn aktiviert, stoppt der Timer nach dieser Phase und wartet auf eine manuelle Bestätigung ("Weiter"-Knopf).</li>
+            </ul>
+        </section>
+
+        <section id="pwa-tipp" class="card">
+            <h2>Tipp: App auf dem Smartphone installieren</h2>
+            <p>Diese Webseite ist eine Progressive Web App (PWA). Sie können sie direkt auf den Startbildschirm Ihres Geräts legen, um sie wie eine native App zu starten – inklusive Offline-Fähigkeit.</p>
+            <ul>
+                <li><strong>iPhone/iPad (Safari):</strong> Öffnen Sie die Webseite, tippen Sie auf das "Teilen"-Symbol und wählen Sie "Zum Home-Bildschirm".</li>
+                <li><strong>Android (Chrome):</strong> Öffnen Sie die Webseite, tippen Sie auf das Menü (drei Punkte) und wählen Sie "App installieren" oder "Zum Startbildschirm hinzufügen".</li>
+            </ul>
+        </section>
+
+        <footer class="text-center mt-8 text-slate-500">
+            <p>Wir wünschen Ihnen viel Spaß und Gut Schuss!</p>
         </footer>
     </div>
 
