@@ -856,10 +856,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // Lädt die TXT-Datei, erwartet aber JSON-Inhalt
             const response = await fetch('disziplinen.txt');
             if (!response.ok) {
-                throw new Error('Netzwerk-Antwort war nicht ok.');
+                throw new Error(`Netzwerk-Fehler: Die Datei konnte nicht gefunden werden (Status: ${response.status})`);
             }
             const serverDisciplines = await response.json();
             
@@ -872,26 +871,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     importedCount++;
                 }
+                // Fügt die Disziplin hinzu oder überschreibt die bestehende
                 disciplines[name] = serverDisciplines[name];
             }
 
-            saveDisciplinesToStorage();
-            renderDisciplineSelector();
-            // Lädt die erste neue Disziplin in den Editor, falls vorhanden
-            if (Object.keys(serverDisciplines).length > 0) {
-                 const firstDisciplineName = Object.keys(serverDisciplines)[0];
-                 adminDisciplineSelect.value = firstDisciplineName;
-                 loadDisciplineForEditor(firstDisciplineName);
+            if (importedCount > 0 || overwrittenCount > 0) {
+                saveDisciplinesToStorage();
+                renderDisciplineSelector();
+                loadDisciplineForEditor(adminDisciplineSelect.value); // Aktualisiert den Editor
+                alert(`${importedCount} neue Disziplin(en) importiert und ${overwrittenCount} bestehende überschrieben.`);
+            } else {
+                alert("Keine neuen Disziplinen zum Importieren gefunden.");
             }
-            alert(`${importedCount} Disziplin(en) neu importiert und ${overwrittenCount} überschrieben.`);
 
         } catch (error) {
             console.error('Fehler beim Laden der Standard-Disziplinen:', error);
-            alert('Die Standard-Disziplinen konnten nicht geladen werden. Stellen Sie sicher, dass die "disziplinen.txt" im Repository existiert.');
+            alert('Fehler: Die Disziplinen konnten nicht geladen werden. Prüfen Sie, ob die "disziplinen.txt" gültiges JSON enthält.');
         }
-    }
-
-    if(loadFromServerBtn) {
-        loadFromServerBtn.addEventListener('click', loadDisciplinesFromServer);
     }
 });
