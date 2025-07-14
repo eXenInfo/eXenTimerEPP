@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const disciplineNameInput = document.getElementById('discipline-name-input');
     const exportAllBtn = document.getElementById('export-all-btn');
     const importBtn = document.getElementById('import-btn');
+    const loadFromServerBtn = document.getElementById('load-from-server-btn'); // Button hier definiert
     
     // New Stage Form
     const newStageName = document.getElementById('new-stage-name');
@@ -59,18 +60,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const processImportBtn = document.getElementById('process-import-btn');
     const cancelImportBtn = document.getElementById('cancel-import-btn');
 
-
     // --- App State ---
     let disciplines = {};
-    let editorStages = []; // Stages for the ADMIN editor
-    let liveStages = []; // Stages for the TIMER view
-    let activeDisciplineName = ''; // Name of the discipline in the TIMER view
+    let editorStages = [];
+    let liveStages = [];
+    let activeDisciplineName = '';
     
     let currentStageIndex = 0;
     let currentRepetition = 1;
     let timeLeft = 0;
     let timerInterval = null;
-    let timerState = 'idle'; // idle, prep, running, paused, rep_pause, finished
+    let timerState = 'idle';
 
     let insertionIndex = -1;
     let audioInitialized = false;
@@ -83,13 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
         navTimerBtn.classList.remove('active');
         navAdminBtn.classList.remove('active');
         navHelpBtn.classList.remove('active');
-
         const views = {
             timer: { view: timerView, btn: navTimerBtn },
             admin: { view: adminView, btn: navAdminBtn },
             help: { view: helpView, btn: navHelpBtn }
         };
-
         if (views[viewName]) {
             views[viewName].view.style.display = 'flex';
             views[viewName].btn.classList.add('active');
@@ -108,23 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
             audioInitialized = true;
         }
     };
-
-    // Add a one-time listener for the first user interaction
     function oneTimeAudioInit() {
         initAudio();
         document.body.removeEventListener('click', oneTimeAudioInit);
         document.body.removeEventListener('touchend', oneTimeAudioInit);
     }
-    document.body.addEventListener('click', oneTimeAudioInit);
-    document.body.addEventListener('touchend', oneTimeAudioInit);
-    
-    navTimerBtn.addEventListener('click', () => switchView('timer'));
-    navAdminBtn.addEventListener('click', () => switchView('admin'));
-    navHelpBtn.addEventListener('click', () => switchView('help'));
-    
     const playSound = () => {
         if (!audioInitialized) {
-            console.warn("Audio not initialized. User interaction needed.");
+            console.warn("Audio not initialized.");
             return;
         }
         try {
@@ -143,36 +132,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const tick = () => {
         timeLeft--;
         updateTimerDisplay();
-
         if (timeLeft > 0) return;
-        
         clearInterval(timerInterval);
         timerInterval = null;
-
         const stage = liveStages[currentStageIndex];
-        
         if (timerState === 'prep') {
             if (stage.soundAtStart) playSound();
-        } else { // 'running' or 'rep_pause'
+        } else {
             if (stage.soundAtEnd) playSound();
         }
-        
         setTimeout(handlePhaseEnd, 100);
     };
-
     const handlePhaseEnd = () => {
         const stage = liveStages[currentStageIndex];
-
         if (timerState === 'prep') {
             startMainDuration();
             return;
         }
-
         if (timerState === 'rep_pause') {
             startNextRepetition();
             return;
         }
-
         if (currentRepetition < stage.repetitions) {
             currentRepetition++;
             startInterRepPauseOrNextRep();
@@ -184,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     };
-
     const startMainDuration = () => {
         const stage = liveStages[currentStageIndex];
         timerState = 'running';
@@ -197,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(handlePhaseEnd, 100);
         }
     };
-    
     const startNextRepetition = () => {
         const stage = liveStages[currentStageIndex];
         timerState = 'running';
@@ -211,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(handlePhaseEnd, 100);
         }
     };
-
     const startInterRepPauseOrNextRep = () => {
         const stage = liveStages[currentStageIndex];
         if (stage.pauseDuration > 0) {
@@ -223,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
             startNextRepetition();
         }
     };
-
     const advanceToNextStage = () => {
         currentStageIndex++;
         currentRepetition = 1;
@@ -233,62 +209,51 @@ document.addEventListener('DOMContentLoaded', () => {
             prepareStage(currentStageIndex);
         }
     };
-    
     const pauseForNextStage = () => {
         timerState = 'paused';
         updateUiForStateChange();
     };
-
     const startTimer = () => {
         initAudio();
         if (liveStages.length === 0) {
             alert("Bitte im Admin-Bereich eine Disziplin laden.");
             return;
         }
-
         if (timerState === 'paused') {
             currentStageIndex++;
             prepareStage(currentStageIndex);
             return;
         }
-        
         if (timerState === 'idle' || timerState === 'finished') {
             if (timerState === 'finished') {
-                currentStageIndex = 0; // Reset to start if finished
+                currentStageIndex = 0;
             }
             loadStage();
         }
     };
-
     const resetCurrentDiscipline = () => {
         clearInterval(timerInterval);
         timerInterval = null;
         if (liveStages.length > 0) {
-            // Setzt den Timer auf den Anfang der Disziplin zurück
             prepareStage(0);
         } else {
-            // Fallback, falls keine Disziplin geladen ist
             timerState = 'idle';
             updateUiForStateChange();
         }
     };
-    
     const finishSequence = () => {
         timerState = 'finished';
         updateUiForStateChange();
     };
-    
     const prepareStage = (index) => {
         currentStageIndex = index;
         currentRepetition = 1;
         timerState = 'idle';
         updateUiForStateChange();
     };
-
     const loadStage = () => {
         const stage = liveStages[currentStageIndex];
         currentRepetition = 1;
-
         if (stage.prepTime > 0) {
             timerState = 'prep';
             timeLeft = stage.prepTime;
@@ -297,9 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
             timeLeft = stage.duration;
             if (stage.soundAtStart) playSound();
         }
-        
         updateUiForStateChange();
-        
         if (timeLeft > 0) {
             timerInterval = setInterval(tick, 1000);
         } else {
@@ -308,20 +271,17 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(handlePhaseEnd, 100);
         }
     };
-    
+
     // --- UI Update Logic ---
     const formatTime = (seconds) => {
         const s = Math.max(0, seconds);
         return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
     }
     const updateTimerDisplay = () => liveTimerDisplay.textContent = formatTime(timeLeft);
-
     const updateUiForStateChange = () => {
         const stage = liveStages[currentStageIndex];
-        
         liveStartBtn.classList.add('hidden');
         liveResetBtn.classList.add('hidden');
-
         if (!liveStages || liveStages.length === 0) {
             liveStageName.textContent = 'Disziplin laden...';
             liveTotalProgress.textContent = 'Bitte im Admin-Bereich eine Disziplin laden.';
@@ -329,22 +289,18 @@ document.addEventListener('DOMContentLoaded', () => {
             liveTimerDisplay.textContent = '00:00';
             return;
         }
-
         switch(timerState) {
             case 'idle':
                 liveStageName.textContent = stage.name;
                 liveTimerDisplay.textContent = formatTime(stage.prepTime > 0 ? stage.prepTime : stage.duration);
                 liveTotalProgress.textContent = `Bereit für Phase ${currentStageIndex + 1} von ${liveStages.length}. Zum Starten 'Start' drücken.`;
-                
                 liveStartBtn.classList.remove('hidden');
                 liveStartBtn.textContent = 'Start';
                 liveStartBtn.className = 'w-full max-w-xs bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors';
-                
                 if (currentStageIndex > 0) {
                     liveResetBtn.classList.remove('hidden');
                 }
                 break;
-
             case 'prep':
             case 'running':
             case 'rep_pause':
@@ -359,30 +315,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 liveTotalProgress.textContent = `Phase ${currentStageIndex + 1} von ${liveStages.length} läuft...`;
                 break;
-
             case 'paused':
                 liveStageName.textContent = `Bereit für nächste Phase`;
                 liveTotalProgress.textContent = `Phase ${currentStageIndex + 1} von ${liveStages.length} beendet.`;
                 liveTimerDisplay.textContent = formatTime(0);
-
                 liveStartBtn.classList.remove('hidden');
                 liveStartBtn.textContent = 'Weiter';
                 liveStartBtn.className = 'w-full max-w-xs bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors';
-                
                 liveResetBtn.classList.remove('hidden');
                 break;
-
             case 'finished':
                 liveStageName.textContent = 'Fertig!';
                 liveTotalProgress.textContent = `Ablauf beendet.`;
                 liveTimerDisplay.textContent = formatTime(0);
-                
                 liveResetBtn.classList.remove('hidden');
                 break;
         }
         updateTimerDisplay();
     };
-    
     const renderLiveStagesList = () => {
         liveStagesListContainer.innerHTML = '';
         if (!liveStages || liveStages.length === 0) {
@@ -398,29 +348,14 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (stage.soundAtStart) soundText = 'Start-Ton';
             else if (stage.soundAtEnd) soundText = 'End-Ton';
             const pauseAfterText = stage.pauseAfter ? ' | Pause nachher' : '';
-
             const stageEl = document.createElement('div');
             stageEl.className = 'bg-gray-700 p-3 rounded-lg flex items-center justify-between';
-            
-            stageEl.innerHTML = `
-                <div class="flex items-center flex-grow min-w-0">
-                    <span class="font-bold text-gray-400 mr-4">${index + 1}.</span>
-                    <div class="min-w-0">
-                        <p class="text-white font-semibold stage-name-display break-word">${stage.name}</p>
-                        <p class="text-xs text-gray-300 break-word">${prepText}${stage.duration}s ${repText}${pauseText} ${soundText}${pauseAfterText}</p>
-                    </div>
-                </div>
-                <button data-action="start-from" data-index="${index}" title="Von hier starten" class="p-2 text-green-400 hover:bg-green-700 hover:text-white rounded-md flex-shrink-0 transition-colors">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg>
-                </button>
-            `;
+            stageEl.innerHTML = `<div class="flex items-center flex-grow min-w-0"><span class="font-bold text-gray-400 mr-4">${index + 1}.</span><div class="min-w-0"><p class="text-white font-semibold stage-name-display break-word">${stage.name}</p><p class="text-xs text-gray-300 break-word">${prepText}${stage.duration}s ${repText}${pauseText} ${soundText}${pauseAfterText}</p></div></div><button data-action="start-from" data-index="${index}" title="Von hier starten" class="p-2 text-green-400 hover:bg-green-700 hover:text-white rounded-md flex-shrink-0 transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg></button>`;
             liveStagesListContainer.appendChild(stageEl);
         });
     };
-
     const renderAdminStagesList = () => {
         adminStagesListContainer.innerHTML = '';
-        
         const createInsertButton = (index) => {
             const btn = document.createElement('button');
             btn.className = 'insert-btn w-full p-1.5 bg-gray-700 hover:bg-amber-500 text-gray-400 hover:text-gray-900 rounded-md transition-colors text-xs font-bold';
@@ -433,9 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             adminStagesListContainer.appendChild(btn);
         };
-
         createInsertButton(0);
-
         if (editorStages.length === 0) {
              document.querySelector(`.insert-btn[data-index='0']`)?.classList.add('bg-amber-500', 'text-gray-900');
              insertionIndex = 0;
@@ -449,31 +382,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if (stage.soundAtStart) soundText = 'Start-Ton';
                 else if (stage.soundAtEnd) soundText = 'End-Ton';
                 const pauseAfterText = stage.pauseAfter ? ' | Pause nachher' : '';
-
                 const stageEl = document.createElement('div');
                 stageEl.className = 'bg-gray-700 p-2 rounded-lg flex items-center justify-between';
                 stageEl.dataset.index = index;
-                
-                stageEl.innerHTML = `
-                    <div class="flex items-center flex-grow cursor-pointer min-w-0" data-action="edit">
-                        <span class="font-bold text-gray-400 mr-3">${index + 1}.</span>
-                        <div class="flex-grow min-w-0">
-                            <p class="text-white font-semibold stage-name-display break-word">${stage.name}</p>
-                            <p class="text-xs text-gray-300 break-word">${prepText}${stage.duration}s ${repText}${pauseText} ${soundText}${pauseAfterText}</p>
-                        </div>
-                    </div>
-                    <div class="stage-controls flex items-center flex-shrink-0 ml-2">
-                         <button data-action="duplicate" title="Duplizieren" class="p-1 hover:bg-gray-600 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
-                         <button data-action="move-up" title="Nach oben" ${index === 0 ? 'disabled' : ''} class="p-1 hover:bg-gray-600 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></button>
-                         <button data-action="move-down" title="Nach unten" ${index === editorStages.length - 1 ? 'disabled' : ''} class="p-1 hover:bg-gray-600 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
-                         <button data-action="remove" title="Löschen" class="p-1 text-red-500 hover:bg-red-700 hover:text-white rounded-md ml-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg></button>
-                    </div>
-                `;
-                
+                stageEl.innerHTML = `<div class="flex items-center flex-grow cursor-pointer min-w-0" data-action="edit"><span class="font-bold text-gray-400 mr-3">${index + 1}.</span><div class="flex-grow min-w-0"><p class="text-white font-semibold stage-name-display break-word">${stage.name}</p><p class="text-xs text-gray-300 break-word">${prepText}${stage.duration}s ${repText}${pauseText} ${soundText}${pauseAfterText}</p></div></div><div class="stage-controls flex items-center flex-shrink-0 ml-2"><button data-action="duplicate" title="Duplizieren" class="p-1 hover:bg-gray-600 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button><button data-action="move-up" title="Nach oben" ${index === 0 ? 'disabled' : ''} class="p-1 hover:bg-gray-600 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></button><button data-action="move-down" title="Nach unten" ${index === editorStages.length - 1 ? 'disabled' : ''} class="p-1 hover:bg-gray-600 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button><button data-action="remove" title="Löschen" class="p-1 text-red-500 hover:bg-red-700 hover:text-white rounded-md ml-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg></button></div>`;
                 stageEl.addEventListener('click', (e) => {
                     const action = e.target.closest('button')?.dataset.action || e.target.closest('[data-action="edit"]')?.dataset.action;
                     if (!action) return;
-
                     switch (action) {
                         case 'edit': openEditModal(index); break;
                         case 'remove': removeStage(index); break;
@@ -482,12 +397,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         case 'duplicate': duplicateStage(index); break;
                     }
                 });
-
                 adminStagesListContainer.appendChild(stageEl);
                 createInsertButton(index + 1);
             });
         }
-        
         if(insertionIndex === -1 || insertionIndex > editorStages.length) {
              insertionIndex = editorStages.length;
         }
@@ -498,7 +411,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const addStage = () => {
         const duration = parseInt(newStageDuration.value);
         if (!duration || isNaN(duration) || duration < 1) { alert("Bitte geben Sie eine gültige Dauer (mind. 1s) an."); return; }
-        
         const newStage = { 
             name: newStageName.value.trim() || 'Unbenannte Phase',
             prepTime: parseInt(newStagePrepTime.value) || 0,
@@ -509,14 +421,10 @@ document.addEventListener('DOMContentLoaded', () => {
             soundAtEnd: newStageSoundEnd.checked,
             pauseAfter: newStagePauseAfter.checked
         };
-
         const finalInsertionIndex = (insertionIndex === -1) ? editorStages.length : insertionIndex;
         editorStages.splice(finalInsertionIndex, 0, newStage);
-        
         insertionIndex = finalInsertionIndex + 1;
         renderAdminStagesList();
-
-        // Clear form
         newStageName.value = '';
         newStagePrepTime.value = '';
         newStageDuration.value = '';
@@ -526,26 +434,22 @@ document.addEventListener('DOMContentLoaded', () => {
         newStageSoundEnd.checked = true;
         newStagePauseAfter.checked = false;
     };
-
     const removeStage = (index) => {
         editorStages.splice(index, 1);
         renderAdminStagesList();
     };
-    
     const moveStage = (index, direction) => {
         const newIndex = index + direction;
         if (newIndex < 0 || newIndex >= editorStages.length) return;
         [editorStages[index], editorStages[newIndex]] = [editorStages[newIndex], editorStages[index]];
         renderAdminStagesList();
     };
-
     const duplicateStage = (index) => {
         const stageToDuplicate = JSON.parse(JSON.stringify(editorStages[index]));
         editorStages.splice(index + 1, 0, stageToDuplicate);
         insertionIndex = index + 2;
         renderAdminStagesList();
     };
-
     const openEditModal = (index) => {
         const stage = editorStages[index];
         editStageIndexInput.value = index;
@@ -559,14 +463,11 @@ document.addEventListener('DOMContentLoaded', () => {
         editStagePauseAfterInput.checked = stage.pauseAfter;
         editModal.classList.remove('hidden');
     };
-
     const closeEditModal = () => editModal.classList.add('hidden');
-
     const handleUpdateStage = () => {
         const index = parseInt(editStageIndexInput.value);
         const duration = parseInt(editStageDurationInput.value);
         if (!duration || isNaN(duration) || duration < 1) { alert("Bitte geben Sie eine gültige Dauer (mind. 1s) an."); return; }
-        
         editorStages[index] = {
             name: editStageNameInput.value.trim() || 'Unbenannte Phase',
             prepTime: parseInt(editStagePrepTimeInput.value) || 0,
@@ -586,307 +487,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentAdminSelection = adminDisciplineSelect.value;
         adminDisciplineSelect.innerHTML = '';
         const names = Object.keys(disciplines).sort((a, b) => a.localeCompare(b));
-        
         if (names.length === 0) {
             adminDisciplineSelect.innerHTML = `<option>Keine Disziplinen</option>`;
             adminLoadBtn.disabled = true;
             adminDeleteBtn.disabled = true;
             return;
         }
-
         names.forEach(name => {
             const option = document.createElement('option');
             option.value = name;
             option.textContent = name;
             adminDisciplineSelect.appendChild(option);
         });
-
         if (disciplines[currentAdminSelection]) adminDisciplineSelect.value = currentAdminSelection;
         adminLoadBtn.disabled = false;
         adminDeleteBtn.disabled = false;
     };
-    
     const saveDisciplinesToStorage = () => {
         try {
             localStorage.setItem('bdmpTimerDisciplines', JSON.stringify(disciplines));
             localStorage.setItem('bdmpTimerActiveDiscipline', activeDisciplineName);
-        } catch (e) {
-            console.error("Failed to save to localStorage", e);
-            alert("Fehler beim Speichern der Daten. Der Speicher könnte voll sein.");
-        }
-    };
-
-    const loadDisciplinesFromStorage = () => {
-        const stored = localStorage.getItem('bdmpTimerDisciplines');
-        if (stored) {
-            try {
-                disciplines = JSON.parse(stored);
-            } catch {
-                disciplines = {}; // Fallback if data is corrupted
-            }
-        } else {
-            // If no disciplines are in storage, load the full default set.
-            disciplines = {
-              "NPA A-B-OS Standard": [
-                { "name": "Stage 1 - 25 Meter\n6 Schuss in 15 Sekunden auf die linke Scheibe.\nIst jemand nicht fertig? - ACHTUNG!", "prepTime": 3, "duration": 15, "repetitions": 1, "pauseDuration": 0, "soundAtStart": true, "soundAtEnd": true, "pauseAfter": true },
-                { "name": "Stage 2 - 20 Meter\n6 Schuss in 10 Sekunden davon 3 auf jede Scheibe.\nIst jemand nicht fertig? - ACHTUNG!", "prepTime": 3, "duration": 10, "repetitions": 1, "pauseDuration": 0, "soundAtStart": true, "soundAtEnd": true, "pauseAfter": true },
-                { "name": "Stage 3 - 15 Meter\n2 Schuss in 3 Sekunden mit 3 Wiederholungen auf die rechte Scheibe.\nIst jemand nicht fertig? - ACHTUNG!", "prepTime": 3, "duration": 3, "repetitions": 3, "pauseDuration": 7, "soundAtStart": true, "soundAtEnd": true, "pauseAfter": true },
-                { "name": "Stage 4 - 10 Meter\n6 Schuss in 6 Sekunden davon 3 auf jede Scheibe.\nIst jemand nicht fertig? - ACHTUNG!", "prepTime": 3, "duration": 6, "repetitions": 1, "pauseDuration": 0, "soundAtStart": true, "soundAtEnd": true, "pauseAfter": false }
-              ],
-              "Police Pistol 2 (PP2)": [
-                { "name": "Station A: 10m\n2x 6 Schuss in 5 Sekunden", "prepTime": 5, "duration": 5, "repetitions": 2, "pauseDuration": 10, "soundAtStart": true, "soundAtEnd": true, "pauseAfter": true },
-                { "name": "Station B: 50m\n24 Schuss in 3 Minuten", "prepTime": 5, "duration": 180, "repetitions": 1, "pauseDuration": 0, "soundAtStart": true, "soundAtEnd": true, "pauseAfter": true },
-                { "name": "Station C: 25m\n24 Schuss in 2 Minuten", "prepTime": 5, "duration": 120, "repetitions": 1, "pauseDuration": 0, "soundAtStart": true, "soundAtEnd": true, "pauseAfter": false }
-              ],
-            };
-            saveDisciplinesToStorage();
-        }
-        
-        const lastActive = localStorage.getItem('bdmpTimerActiveDiscipline');
-        if (lastActive && disciplines[lastActive]) {
-            loadDisciplineForTimer(lastActive, false); // Don't switch view on initial load
-        }
-
-        renderDisciplineSelector();
-    };
-    
-    function handleSaveDiscipline() {
-        const name = disciplineNameInput.value.trim();
-        if (!name) { alert("Bitte geben Sie einen Namen an."); return; }
-        if (editorStages.length === 0) { alert("Ablauf ist leer und kann nicht gespeichert werden."); return; }
-        
-        if (disciplines[name] && disciplineNameInput.value !== adminDisciplineSelect.value) {
-            if (!confirm(`Die Disziplin "${name}" existiert bereits. Möchten Sie sie überschreiben?`)) {
-                return;
-            }
-        }
-
-        disciplines[name] = JSON.parse(JSON.stringify(editorStages));
-        saveDisciplinesToStorage();
-        renderDisciplineSelector();
-        adminDisciplineSelect.value = name;
-        alert(`Disziplin "${name}" wurde gespeichert!`);
-    }
-    
-    function handleDeleteDiscipline() {
-        const name = adminDisciplineSelect.value;
-        if (disciplines[name] && confirm(`Disziplin "${name}" wirklich löschen? Dies kann nicht rückgängig gemacht werden.`)) {
-            delete disciplines[name];
-            
-            if (activeDisciplineName === name) {
-                activeDisciplineName = '';
-                liveStages = [];
-                resetCurrentDiscipline();
-                renderLiveStagesList();
-                liveDisciplineName.textContent = '-';
-            }
-            
-            if (disciplineNameInput.value === name) {
-                editorStages = [];
-                disciplineNameInput.value = '';
-                editingDisciplineName.textContent = 'Neue Disziplin';
-                renderAdminStagesList();
-            }
-
-            saveDisciplinesToStorage();
-            renderDisciplineSelector();
-        }
-    }
-
-    function loadDisciplineForEditor(name) {
-        if (disciplines[name]) {
-            editorStages = JSON.parse(JSON.stringify(disciplines[name]));
-            disciplineNameInput.value = name;
-            editingDisciplineName.textContent = name;
-            insertionIndex = editorStages.length;
-            renderAdminStagesList();
-        }
-    }
-
-    function loadDisciplineForTimer(name, doSwitchView = true) {
-        if (disciplines[name]) {
-            liveStages = JSON.parse(JSON.stringify(disciplines[name]));
-            activeDisciplineName = name;
-            liveDisciplineName.textContent = name;
-            
-            saveDisciplinesToStorage();
-            renderLiveStagesList();
-            resetCurrentDiscipline();
-            
-            if (doSwitchView) {
-                switchView('timer');
-            }
-        } else {
-            alert(`Disziplin "${name}" konnte nicht gefunden werden.`);
-        }
-    }
-    
-    // --- Import / Export via Clipboard ---
-    function copyToClipboard(text, successMessage) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed"; 
-        textArea.style.left = "-9999px";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            alert(successMessage);
-        } catch (err) {
-            console.error('Fehler beim Kopieren in die Zwischenablage: ', err);
-            alert('Kopieren fehlgeschlagen. Bitte manuell kopieren.');
-        }
-        document.body.removeChild(textArea);
-    }
-
-    function handleExportAll() {
-        if (Object.keys(disciplines).length === 0) {
-            alert("Keine Disziplinen zum Kopieren vorhanden.");
-            return;
-        }
-        const dataStr = JSON.stringify(disciplines, null, 2);
-        copyToClipboard(dataStr, "Die gesamte Sammlung wurde in die Zwischenablage kopiert.");
-    }
-    
-    function handleExportSingle() {
-        const name = adminDisciplineSelect.value;
-        if (!disciplines[name]) {
-            alert("Bitte wählen Sie eine gültige Disziplin zum Kopieren aus.");
-            return;
-        }
-        const singleDiscipline = { [name]: disciplines[name] };
-        const dataStr = JSON.stringify(singleDiscipline, null, 2);
-        copyToClipboard(dataStr, `Disziplin "${name}" wurde in die Zwischenablage kopiert.`);
-    }
-
-    function handleImport() {
-        importTextArea.value = '';
-        importModal.classList.remove('hidden');
-    }
-
-    function processImportFromText() {
-        const importedData = importTextArea.value;
-        if (!importedData.trim()) {
-            alert("Das Textfeld ist leer. Bitte fügen Sie Daten ein.");
-            return;
-        }
-        try {
-            const importedDisciplines = JSON.parse(importedData);
-            let importedCount = 0;
-            let overwrittenCount = 0;
-            
-            for (const name in importedDisciplines) {
-                if (Object.prototype.hasOwnProperty.call(importedDisciplines, name) && Array.isArray(importedDisciplines[name])) {
-                    if (disciplines[name]) {
-                        if (confirm(`Disziplin "${name}" existiert bereits. Möchten Sie sie mit der importierten Version überschreiben?`)) {
-                            disciplines[name] = importedDisciplines[name];
-                            overwrittenCount++;
-                        }
-                    } else {
-                        disciplines[name] = importedDisciplines[name];
-                        importedCount++;
-                    }
-                }
-            }
-
-            if (importedCount > 0 || overwrittenCount > 0) {
-                saveDisciplinesToStorage();
-                renderDisciplineSelector();
-                loadDisciplineForEditor(adminDisciplineSelect.value);
-                alert(`${importedCount} Disziplin(en) neu importiert, ${overwrittenCount} überschrieben.`);
-            } else {
-                alert("Keine neuen oder zu überschreibenden Disziplinen in den Daten gefunden.");
-            }
-        } catch (e) {
-            alert("Fehler beim Verarbeiten der Daten. Stellen Sie sicher, dass der Text das korrekte Format hat.");
-            console.error(e);
-        } finally {
-            importModal.classList.add('hidden');
-        }
-    }
-
-    // --- Event Listeners ---
-    liveStartBtn.addEventListener('click', startTimer);
-    liveResetBtn.addEventListener('click', resetCurrentDiscipline);
-    
-    liveStagesListContainer.addEventListener('click', (event) => {
-        const startButton = event.target.closest('button[data-action="start-from"]');
-        if (startButton) {
-            initAudio();
-            const index = parseInt(startButton.dataset.index, 10);
-            if (!isNaN(index)) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                prepareStage(index);
-            }
-        }
-    });
-
-    addStageBtn.addEventListener('click', addStage);
-    saveDisciplineBtn.addEventListener('click', handleSaveDiscipline);
-    adminLoadBtn.addEventListener('click', () => loadDisciplineForTimer(adminDisciplineSelect.value));
-    adminExportSingleBtn.addEventListener('click', handleExportSingle);
-    adminDisciplineSelect.addEventListener('change', () => loadDisciplineForEditor(adminDisciplineSelect.value));
-    adminDeleteBtn.addEventListener('click', handleDeleteDiscipline);
-    
-    saveEditBtn.addEventListener('click', handleUpdateStage);
-    cancelEditBtn.addEventListener('click', closeEditModal);
-    
-    exportAllBtn.addEventListener('click', handleExportAll);
-    importBtn.addEventListener('click', handleImport);
-    
-    cancelImportBtn.addEventListener('click', () => importModal.classList.add('hidden'));
-    processImportBtn.addEventListener('click', processImportFromText);
-    
-    // --- Initial Load ---
-    loadDisciplinesFromStorage();
-    updateUiForStateChange(); // Initial UI setup for timer
-    if (Object.keys(disciplines).length > 0) {
-        loadDisciplineForEditor(adminDisciplineSelect.value);
-    } else {
-        renderAdminStagesList();
-    }
-    // --- Standard-Disziplinen vom Server laden ---
-    const loadFromServerBtn = document.getElementById('load-from-server-btn');
-
-    async function loadDisciplinesFromServer() {
-        if (!confirm("Möchten Sie die Standard-Disziplinen laden? Bestehende Disziplinen mit gleichem Namen werden überschrieben.")) {
-            return;
-        }
-
-        try {
-            const response = await fetch('disziplinen.txt');
-            if (!response.ok) {
-                throw new Error(`Netzwerk-Fehler: Die Datei konnte nicht gefunden werden (Status: ${response.status})`);
-            }
-            const serverDisciplines = await response.json();
-            
-            let importedCount = 0;
-            let overwrittenCount = 0;
-            
-            for (const name in serverDisciplines) {
-                if (disciplines[name]) {
-                    overwrittenCount++;
-                } else {
-                    importedCount++;
-                }
-                // Fügt die Disziplin hinzu oder überschreibt die bestehende
-                disciplines[name] = serverDisciplines[name];
-            }
-
-            if (importedCount > 0 || overwrittenCount > 0) {
-                saveDisciplinesToStorage();
-                renderDisciplineSelector();
-                loadDisciplineForEditor(adminDisciplineSelect.value); // Aktualisiert den Editor
-                alert(`${importedCount} neue Disziplin(en) importiert und ${overwrittenCount} bestehende überschrieben.`);
-            } else {
-                alert("Keine neuen Disziplinen zum Importieren gefunden.");
-            }
-
-        } catch (error) {
-            console.error('Fehler beim Laden der Standard-Disziplinen:', error);
-            alert('Fehler: Die Disziplinen konnten nicht geladen werden. Prüfen Sie, ob die "disziplinen.txt" gültiges JSON enthält.');
-        }
-    }
-});
+        } catch (e
