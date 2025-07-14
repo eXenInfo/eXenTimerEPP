@@ -7,7 +7,7 @@ Ein vielseitiger und anpassbarer Timer, der als Progressive Web App (PWA) entwic
 
 **[» Zur Live-Demo «](https://exeninfo.github.io/eXen-Timer/)**
 
-![eXen-Timer Screenshot](https://raw.githubusercontent.com/eXenInfo/eXen-Timer/main/screenshot.png)
+![eXen-Timer Screenshot](https://raw.githubusercontent.com/eXenInfo/eXen-Timer/main/Screenshot 2025-07-14 105837.png)
 *(Optional: Ersetze den Link oben durch einen direkten Link zu einem Screenshot deines Timers, den du ins Repository hochgeladen hast.)*
 
 ## Hauptfunktionen
