@@ -264,8 +264,10 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(timerInterval);
         timerInterval = null;
         if (liveStages.length > 0) {
+            // Setzt den Timer auf den Anfang der Disziplin zurück
             prepareStage(0);
         } else {
+            // Fallback, falls keine Disziplin geladen ist
             timerState = 'idle';
             updateUiForStateChange();
         }
