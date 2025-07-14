@@ -7,9 +7,6 @@ Ein vielseitiger und anpassbarer Timer, der als Progressive Web App (PWA) entwic
 
 **[» Zur Live-Demo «](https://exeninfo.github.io/eXen-Timer/)**
 
-[eXen-Timer Screenshot](https://raw.githubusercontent.com/eXenInfo/eXen-Timer/main/Screenshot.png)
-
-
 ## Hauptfunktionen
 
 * **Präziser Timer:** Steuert Vorlaufzeiten, Übungsdauer, Wiederholungen und Pausen sekundengenau.
