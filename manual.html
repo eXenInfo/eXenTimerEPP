@@ -8,7 +8,7 @@
     <style>
         /* Manuelle Stile für eine saubere Darstellung des Handbuchs */
         body { background-color: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; line-height: 1.6; }
-        .container { max-width: 800px; margin: auto; padding: 1.5rem; }
+        .container { max-w-2xl; margin: auto; padding: 1.5rem; }
         h1, h2, h3 { font-weight: 700; color: #0f172a; }
         h1 { font-size: 2.25rem; margin-bottom: 1rem; text-align: center; }
         h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
@@ -37,53 +37,53 @@
 
         <section id="einfuehrung" class="card">
             <h2>Einführung</h2>
-            <p>Herzlich willkommen zum eXen-Timer! Dieser Timer wurde speziell für die Anforderungen der dynamischen Schießdisziplinen des BDMP entwickelt. Er hilft Ihnen, Trainingsabläufe präzise zu steuern, eigene Disziplinen zu erstellen und diese einfach mit anderen zu teilen.</p>
+            <p>Herzlich willkommen zum eXen-Timer! Dieser Timer wurde entwickelt, um <strong>dir</strong> das Training und die Durchführung der dynamischen BDMP-Disziplinen zu vereinfachen. Dieses Handbuch erklärt <strong>dir</strong> alle Funktionen der App.</p>
             <p>Die App besteht aus drei Hauptbereichen: <strong>Timer</strong>, <strong>Admin</strong> und <strong>Hilfe</strong>.</p>
         </section>
 
         <section id="timer-ansicht" class="card">
             <h2>Die Timer-Ansicht</h2>
-            <p>Dies ist Ihre Kommandozentrale am Schießstand. Die Ansicht ist bewusst minimalistisch gehalten, um eine schnelle und fehlerfreie Bedienung zu gewährleisten.</p>
+            <p>Dies ist <strong>deine</strong> Kommandozentrale am Schießstand. Die Ansicht ist bewusst minimalistisch gehalten, um eine schnelle und fehlerfreie Bedienung zu gewährleisten.</p>
             
             <h3>1. Eine Disziplin durchführen</h3>
             <ol>
-                <li><strong>Disziplin laden:</strong> Wechseln Sie zuerst in die "Admin"-Ansicht. Wählen Sie eine Disziplin aus der Liste aus und klicken Sie auf den <span class="button-like bg-blue">Laden</span>-Knopf. Die App wechselt automatisch zurück in die Timer-Ansicht.</li>
-                <li><strong>Ablauf starten:</strong> Klicken Sie auf den großen grünen <span class="button-like bg-green">Start</span>-Knopf, um die erste Phase zu beginnen.</li>
-                <li><strong>Pausen & Nächste Phase:</strong> Wenn eine Phase die Option "Pause nachher" aktiviert hat, hält der Timer an und zeigt einen <span class="button-like bg-blue">Weiter</span>-Knopf. Ein Klick darauf bereitet die nächste Phase vor, die Sie dann wieder mit "Start" auslösen.</li>
+                <li><strong>Disziplin laden:</strong> Wechsle zuerst in die "Admin"-Ansicht. Wähle eine Disziplin aus der Liste aus und klicke auf den <span class="button-like bg-blue">Laden</span>-Knopf. Die App wechselt automatisch zurück in die Timer-Ansicht.</li>
+                <li><strong>Ablauf starten:</strong> Klicke auf den großen grünen <span class="button-like bg-green">Start</span>-Knopf, um die erste Phase zu beginnen.</li>
+                <li><strong>Pausen & Nächste Phase:</strong> Wenn eine Phase die Option "Pause nachher" aktiviert hat, hält der Timer an und zeigt einen <span class="button-like bg-blue">Weiter</span>-Knopf. Ein Klick darauf bereitet die nächste Phase vor, die <strong>du</strong> dann wieder mit "Start" auslöst.</li>
                 <li><strong>Reset:</strong> Ein Klick auf den roten <span class="button-like bg-red">Reset</span>-Knopf bricht den gesamten Ablauf sofort ab und setzt die Disziplin auf den Anfang der ersten Phase zurück.</li>
             </ol>
 
             <h3>2. Einzelne Phasen trainieren</h3>
-            <p>Sie müssen nicht immer den gesamten Ablauf starten. In der Liste der Phasen unter dem Timer finden Sie neben jeder Phase ein Play-Symbol (▶). Ein Klick darauf setzt den Timer direkt an den Anfang dieser spezifischen Phase. So können Sie gezielt einzelne Übungen wiederholen.</p>
+            <p><strong>Du</strong> musst nicht immer den gesamten Ablauf starten. In der Liste der Phasen unter dem Timer findest <strong>du</strong> neben jeder Phase ein Play-Symbol (▶). Ein Klick darauf setzt den Timer direkt an den Anfang dieser spezifischen Phase. So kannst <strong>du</strong> gezielt einzelne Übungen wiederholen.</p>
         </section>
         
         <section id="admin-ansicht" class="card">
             <h2>Die Admin-Ansicht</h2>
-            <p>Hier verwalten Sie Ihre Inhalte. Sie können Disziplinen bearbeiten, neue erstellen, importieren und exportieren.</p>
+            <p>Hier verwaltest <strong>du</strong> deine Inhalte. <strong>Du</strong> kannst Disziplinen bearbeiten, neue erstellen, importieren und exportieren.</p>
 
             <h3>1. Disziplin-Verwaltung</h3>
             <ul>
                 <li><strong>Laden:</strong> Überträgt die ausgewählte Disziplin in die Timer-Ansicht und macht sie startklar.</li>
-                <li><strong>Kopieren:</strong> Kopiert die Daten der ausgewählten Disziplin als Text (im JSON-Format) in Ihre Zwischenablage.</li>
-                <li><strong>Löschen:</strong> Entfernt die ausgewählte Disziplin dauerhaft aus dem Speicher Ihres Geräts.</li>
+                <li><strong>Kopieren:</strong> Kopiert die Daten der ausgewählten Disziplin als Text (im JSON-Format) in <strong>deine</strong> Zwischenablage.</li>
+                <li><strong>Löschen:</strong> Entfernt die ausgewählte Disziplin dauerhaft aus dem Speicher <strong>deines</strong> Geräts.</li>
             </ul>
 
             <h3>2. Sammlung Teilen / Sichern</h3>
             <ul>
-                <li><strong>Sammlung kopieren:</strong> Kopiert **alle** Ihre gespeicherten Disziplinen in die Zwischenablage. Ideal für ein komplettes Backup.</li>
-                <li><strong>Aus Text einfügen:</strong> Öffnet ein Fenster, in das Sie zuvor kopierte Disziplin-Daten einfügen können, um sie zu importieren.</li>
+                <li><strong>Sammlung kopieren:</strong> Kopiert **alle** deiner gespeicherten Disziplinen in die Zwischenablage. Ideal für ein komplettes Backup.</li>
+                <li><strong>Aus Text einfügen:</strong> Öffnet ein Fenster, in das <strong>du</strong> zuvor kopierte Disziplin-Daten einfügen kannst, um sie zu importieren.</li>
             </ul>
 
             <h3>3. Standard-Satz laden</h3>
-            <p>Ein Klick auf <span class="button-like bg-green">BDMP-Standard laden</span> lädt eine von uns kuratierte Liste von Standard-Disziplinen direkt vom Server in Ihre App. Bestehende Disziplinen mit gleichem Namen werden dabei überschrieben.</p>
+            <p>Ein Klick auf <span class="button-like bg-green">BDMP-Standard laden</span> lädt eine von uns kuratierte Liste von Standard-Disziplinen direkt vom Server in <strong>deine</strong> App. Bestehende Disziplinen mit gleichem Namen werden dabei überschrieben.</p>
 
             <h3>4. Der Disziplin-Editor: Eigene Abläufe erstellen</h3>
-            <p>Hier liegt das Herzstück der App. Wenn Sie eine Disziplin aus der Liste auswählen, wird sie im Editor geladen. Sie können aber auch eine komplett neue erstellen.</p>
+            <p>Hier liegt das Herzstück der App. Wenn <strong>du</strong> eine Disziplin aus der Liste auswählst, wird sie im Editor geladen. <strong>Du</strong> kannst aber auch eine komplett neue erstellen.</p>
             
             <h4>Phasen bearbeiten & verwalten</h4>
             <ul>
-                <li><strong>Bearbeiten:</strong> Klicken Sie direkt auf den Text einer Phase, um sie im "Phase bearbeiten"-Fenster anzupassen.</li>
-                <li><strong>Verschieben:</strong> Nutzen Sie die Pfeil-Knöpfe (▲/▼) rechts, um die Reihenfolge der Phasen zu ändern.</li>
+                <li><strong>Bearbeiten:</strong> Klicke direkt auf den Text einer Phase, um sie im "Phase bearbeiten"-Fenster anzupassen.</li>
+                <li><strong>Verschieben:</strong> Nutze die Pfeil-Knöpfe (▲/▼) rechts, um die Reihenfolge der Phasen zu ändern.</li>
                 <li><strong>Duplizieren (❐):</strong> Erstellt eine Kopie einer Phase direkt darunter.</li>
                 <li><strong>Löschen (❌):</strong> Entfernt eine Phase.</li>
             </ul>
@@ -102,15 +102,15 @@
 
         <section id="pwa-tipp" class="card">
             <h2>Tipp: App auf dem Smartphone installieren</h2>
-            <p>Diese Webseite ist eine Progressive Web App (PWA). Sie können sie direkt auf den Startbildschirm Ihres Geräts legen, um sie wie eine native App zu starten – inklusive Offline-Fähigkeit.</p>
+            <p>Diese Webseite ist eine Progressive Web App (PWA). <strong>Du</strong> kannst sie direkt auf den Startbildschirm <strong>deines</strong> Geräts legen, um sie wie eine native App zu starten – inklusive Offline-Fähigkeit.</p>
             <ul>
-                <li><strong>iPhone/iPad (Safari):</strong> Öffnen Sie die Webseite, tippen Sie auf das "Teilen"-Symbol und wählen Sie "Zum Home-Bildschirm".</li>
-                <li><strong>Android (Chrome):</strong> Öffnen Sie die Webseite, tippen Sie auf das Menü (drei Punkte) und wählen Sie "App installieren" oder "Zum Startbildschirm hinzufügen".</li>
+                <li><strong>iPhone/iPad (Safari):</strong> Öffne die Webseite, tippe auf das "Teilen"-Symbol und wähle "Zum Home-Bildschirm".</li>
+                <li><strong>Android (Chrome):</strong> Öffne die Webseite, tippe auf das Menü (drei Punkte) und wähle "App installieren" oder "Zum Startbildschirm hinzufügen".</li>
             </ul>
         </section>
 
         <footer class="text-center mt-8 text-slate-500">
-            <p>Wir wünschen Ihnen viel Spaß und Gut Schuss!</p>
+            <p>Ich wünsche <strong>dir</strong> viel Spaß und Gut Schuss!</p>
         </footer>
     </div>
 
