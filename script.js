@@ -232,11 +232,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     const resetCurrentDiscipline = () => {
+        // 1. Stoppt den laufenden Timer
         clearInterval(timerInterval);
         timerInterval = null;
+
         if (liveStages.length > 0) {
-            prepareStage(0);
+            // 2. Setzt den Zustand auf den Anfang der Disziplin zurück
+            currentStageIndex = 0;
+            currentRepetition = 1;
+            timerState = 'idle';
+
+            // 3. (Die entscheidende Korrektur)
+            // Ruft die Haupt-Update-Funktion auf, um die gesamte Anzeige
+            // (Timer, Buttons, Texte) neu zu zeichnen.
+            updateUiForStateChange();
+
         } else {
+            // Fallback, falls keine Disziplin geladen ist
             timerState = 'idle';
             updateUiForStateChange();
         }
