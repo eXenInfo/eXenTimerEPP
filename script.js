@@ -232,24 +232,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     const resetCurrentDiscipline = () => {
-        // 1. Stoppt den laufenden Timer
+        // 1. Stoppt den laufenden Timer-Loop
         clearInterval(timerInterval);
         timerInterval = null;
 
         if (liveStages.length > 0) {
-            // 2. Setzt den Zustand auf den Anfang der Disziplin zurück
+            // 2. Setzt den Zustand der App auf den Anfang zurück
             currentStageIndex = 0;
             currentRepetition = 1;
             timerState = 'idle';
 
-            // 3. (Die entscheidende Korrektur)
-            // Ruft die Haupt-Update-Funktion auf, um die gesamte Anzeige
-            // (Timer, Buttons, Texte) neu zu zeichnen.
-            updateUiForStateChange();
+            // 3. (DIE KORREKTUR) Holt die allererste Phase der Disziplin
+            const firstStage = liveStages[0];
+            
+            // 4. (DIE KORREKTUR) Setzt die globale Zeitvariable auf den Startwert dieser Phase
+            //    (bevorzugt auf die Vorlaufzeit, falls vorhanden)
+            timeLeft = firstStage.prepTime > 0 ? firstStage.prepTime : firstStage.duration;
 
+            // 5. Aktualisiert die gesamte Benutzeroberfläche basierend auf dem neuen Zustand
+            updateUiForStateChange();
+            
         } else {
             // Fallback, falls keine Disziplin geladen ist
-            timerState = 'idle';
+            timeLeft = 0;
             updateUiForStateChange();
         }
     };
