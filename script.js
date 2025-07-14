@@ -847,4 +847,51 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         renderAdminStagesList();
     }
+    // --- Standard-Disziplinen vom Server laden ---
+    const loadFromServerBtn = document.getElementById('load-from-server-btn');
+
+    async function loadDisciplinesFromServer() {
+        if (!confirm("Möchten Sie die Standard-Disziplinen laden? Bestehende Disziplinen mit gleichem Namen werden überschrieben.")) {
+            return;
+        }
+
+        try {
+            // Lädt die TXT-Datei, erwartet aber JSON-Inhalt
+            const response = await fetch('disziplinen.txt');
+            if (!response.ok) {
+                throw new Error('Netzwerk-Antwort war nicht ok.');
+            }
+            const serverDisciplines = await response.json();
+            
+            let importedCount = 0;
+            let overwrittenCount = 0;
+            
+            for (const name in serverDisciplines) {
+                if (disciplines[name]) {
+                    overwrittenCount++;
+                } else {
+                    importedCount++;
+                }
+                disciplines[name] = serverDisciplines[name];
+            }
+
+            saveDisciplinesToStorage();
+            renderDisciplineSelector();
+            // Lädt die erste neue Disziplin in den Editor, falls vorhanden
+            if (Object.keys(serverDisciplines).length > 0) {
+                 const firstDisciplineName = Object.keys(serverDisciplines)[0];
+                 adminDisciplineSelect.value = firstDisciplineName;
+                 loadDisciplineForEditor(firstDisciplineName);
+            }
+            alert(`${importedCount} Disziplin(en) neu importiert und ${overwrittenCount} überschrieben.`);
+
+        } catch (error) {
+            console.error('Fehler beim Laden der Standard-Disziplinen:', error);
+            alert('Die Standard-Disziplinen konnten nicht geladen werden. Stellen Sie sicher, dass die "disziplinen.txt" im Repository existiert.');
+        }
+    }
+
+    if(loadFromServerBtn) {
+        loadFromServerBtn.addEventListener('click', loadDisciplinesFromServer);
+    }
 });
