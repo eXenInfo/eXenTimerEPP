@@ -6,19 +6,20 @@
     <title>Benutzerhandbuch: eXen-Timer</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Manuelle Stile für eine saubere Darstellung des Handbuchs */
         body { background-color: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; line-height: 1.6; }
         .container { max-width: 800px; margin: auto; padding: 1.5rem; }
-        h1, h2, h3 { font-weight: 700; color: #0f172a; }
-        h1 { font-size: 2.25rem; margin-bottom: 1rem; text-align: center; }
-        h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+        h1, h2, h3, h4 { font-weight: 700; color: #0f172a; }
+        h1 { font-size: 2.25rem; margin-bottom: 0.5rem; text-align: center; }
+        h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
         h3 { font-size: 1.25rem; margin-top: 2rem; margin-bottom: 0.75rem; color: #334155; }
+        h4 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #475569; }
         p, ul, ol { margin-bottom: 1rem; }
         ul, ol { padding-left: 1.5rem; }
         li { margin-bottom: 0.5rem; }
         a { color: #f59e0b; font-weight: 600; }
         a:hover { text-decoration: underline; }
-        code { background-color: #e2e8f0; color: #475569; padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-family: monospace; }
+        .lang-switcher { text-align: center; margin-bottom: 2rem; background-color: #e2e8f0; padding: 0.5rem; border-radius: 0.5rem; }
+        .lang-switcher a { margin: 0 0.5rem; }
         .card { background-color: white; border-radius: 0.75rem; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); }
         .button-like { display: inline-block; color: white; font-weight: bold; padding: 0.25rem 0.75rem; border-radius: 0.375rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
         .bg-green { background-color: #16a34a; }
@@ -29,90 +30,151 @@
 <body>
 
     <div class="container">
-        <header class="text-center mb-8">
-            <h1>Benutzerhandbuch: eXen-Timer</h1>
-            <p class="text-lg text-slate-600">Eine vollständige Anleitung zur Nutzung aller Funktionen.</p>
-            <a href="index.html">&laquo; Zurück zum Timer</a>
+        <header>
+            <h1>Benutzerhandbuch / User Manual</h1>
+            <div class="lang-switcher">
+                <a href="#de">Deutsch</a> | <a href="#en">English</a>
+            </div>
+            <p class="text-center text-slate-600">Eine vollständige Anleitung zur Nutzung aller Funktionen.</p>
         </header>
 
-        <section id="einfuehrung" class="card">
-            <h2>Einführung</h2>
-            <p>Herzlich willkommen zum eXen-Timer! Dieser Timer wurde entwickelt, um dir das Training und die Durchführung der dynamischen BDMP-Disziplinen zu vereinfachen. Dieses Handbuch erklärt dir alle Funktionen der App.</p>
-            <p>Die App besteht aus drei Hauptbereichen: <strong>Timer</strong>, <strong>Admin</strong> und <strong>Hilfe</strong>.</p>
-        </section>
+        <div id="de">
+            <h2 id="manual-de">Deutsches Handbuch</h2>
+            <section class="card">
+                <h3>Einführung</h3>
+                <p>Herzlich willkommen zum eXen-Timer! Dieser Timer wurde entwickelt, um dir das Training und die Durchführung der dynamischen BDMP-Disziplinen zu vereinfachen. Dieses Handbuch erklärt dir alle Funktionen der App.</p>
+            </section>
 
-        <section id="timer-ansicht" class="card">
-            <h2>Die Timer-Ansicht</h2>
-            <p>Dies ist deine Kommandozentrale am Schießstand. Die Ansicht ist bewusst minimalistisch gehalten, um eine schnelle und fehlerfreie Bedienung zu gewährleisten.</p>
+            <section class="card">
+                <h3>Die Timer-Ansicht</h3>
+                <p>Dies ist deine Kommandozentrale am Schießstand, bewusst minimalistisch gehalten für eine schnelle und fehlerfreie Bedienung.</p>
+                
+                <h4>1. Eine Disziplin durchführen</h4>
+                <ol>
+                    <li><strong>Disziplin laden:</strong> Wechsle in die "Admin"-Ansicht, wähle eine Disziplin und klicke auf den <span class="button-like bg-blue">Laden</span>-Knopf. Die App wechselt automatisch zurück.</li>
+                    <li><strong>Ablauf starten:</strong> Klicke auf den großen grünen <span class="button-like bg-green">Start</span>-Knopf.</li>
+                    <li><strong>Pausen & Nächste Phase:</strong> Wenn eine Phase die Option "Pause nachher" hat, hält der Timer an und zeigt einen <span class="button-like bg-blue">Weiter</span>-Knopf, der die nächste Phase vorbereitet.</li>
+                    <li><strong>Reset:</strong> Der rote <span class="button-like bg-red">Reset</span>-Knopf bricht den Ablauf ab und setzt die Disziplin auf den Anfang zurück.</li>
+                </ol>
+
+                <h4>2. Einzelne Phasen trainieren</h4>
+                <p>Klicke in der Phasen-Liste auf das Play-Symbol (▶) neben einer Übung, um direkt zu dieser zu springen und sie isoliert zu trainieren.</p>
+            </section>
             
-            <h3>1. Eine Disziplin durchführen</h3>
-            <ol>
-                <li><strong>Disziplin laden:</strong> Wechsle zuerst in die "Admin"-Ansicht. Wähle eine Disziplin aus der Liste aus und klicke auf den <span class="button-like bg-blue">Laden</span>-Knopf. Die App wechselt automatisch zurück in die Timer-Ansicht.</li>
-                <li><strong>Ablauf starten:</strong> Klicke auf den großen grünen <span class="button-like bg-green">Start</span>-Knopf, um die erste Phase zu beginnen.</li>
-                <li><strong>Pausen & Nächste Phase:</strong> Wenn eine Phase die Option "Pause nachher" aktiviert hat, hält der Timer an und zeigt einen <span class="button-like bg-blue">Weiter</span>-Knopf. Ein Klick darauf bereitet die nächste Phase vor, die du dann wieder mit "Start" auslöst.</li>
-                <li><strong>Reset:</strong> Ein Klick auf den roten <span class="button-like bg-red">Reset</span>-Knopf bricht den gesamten Ablauf sofort ab und setzt die Disziplin auf den Anfang der ersten Phase zurück.</li>
-            </ol>
+            <section class="card">
+                <h3>Die Admin-Ansicht</h3>
+                <p>Hier verwaltest du deine Inhalte. Du kannst Disziplinen bearbeiten, neue erstellen, importieren und exportieren.</p>
 
-            <h3>2. Einzelne Phasen trainieren</h3>
-            <p>Du musst nicht immer den gesamten Ablauf starten. In der Liste der Phasen unter dem Timer findest du neben jeder Phase ein Play-Symbol (▶). Ein Klick darauf setzt den Timer direkt an den Anfang dieser spezifischen Phase. So kannst du gezielt einzelne Übungen wiederholen.</p>
-        </section>
-        
-        <section id="admin-ansicht" class="card">
-            <h2>Die Admin-Ansicht</h2>
-            <p>Hier verwaltest du deine Inhalte. Du kannst Disziplinen bearbeiten, neue erstellen, importieren und exportieren.</p>
+                <h4>1. Disziplin-Verwaltung</h4>
+                <ul>
+                    <li><strong>Laden:</strong> Überträgt die Disziplin in die Timer-Ansicht.</li>
+                    <li><strong>Kopieren:</strong> Kopiert die ausgewählte Disziplin als Text in deine Zwischenablage.</li>
+                    <li><strong>Löschen:</strong> Entfernt die Disziplin dauerhaft aus dem Gerätespeicher.</li>
+                </ul>
 
-            <h3>1. Disziplin-Verwaltung</h3>
-            <ul>
-                <li><strong>Laden:</strong> Überträgt die ausgewählte Disziplin in die Timer-Ansicht und macht sie startklar.</li>
-                <li><strong>Kopieren:</strong> Kopiert die Daten der ausgewählten Disziplin als Text (im JSON-Format) in deine Zwischenablage.</li>
-                <li><strong>Löschen:</strong> Entfernt die ausgewählte Disziplin dauerhaft aus dem Speicher deines Geräts.</li>
-            </ul>
+                <h4>2. Sammlung Teilen / Sichern</h4>
+                <ul>
+                    <li><strong>Sammlung kopieren:</strong> Kopiert **alle** deine Disziplinen als Backup.</li>
+                    <li><strong>Aus Text einfügen:</strong> Importiert zuvor kopierte Disziplinen.</li>
+                </ul>
 
-            <h3>2. Sammlung Teilen / Sichern</h3>
-            <ul>
-                <li><strong>Sammlung kopieren:</strong> Kopiert alle deiner gespeicherten Disziplinen in die Zwischenablage. Ideal für ein komplettes Backup.</li>
-                <li><strong>Aus Text einfügen:</strong> Öffnet ein Fenster, in das du zuvor kopierte Disziplin-Daten einfügen kannst, um sie zu importieren.</li>
-            </ul>
+                <h4>3. Standard-Satz laden</h4>
+                <p>Ein Klick auf <span class="button-like bg-green">BDMP-Standard laden</span> lädt eine kuratierte Liste von Disziplinen vom Server. Bestehende Disziplinen werden überschrieben.</p>
 
-            <h3>3. Standard-Satz laden</h3>
-            <p>Ein Klick auf <span class="button-like bg-green">BDMP-Standard laden</span> lädt eine von uns kuratierte Liste von Standard-Disziplinen direkt vom Server in deine App. Bestehende Disziplinen mit gleichem Namen werden dabei überschrieben.</p>
+                <h4>4. Der Disziplin-Editor</h4>
+                <p>Hier liegt das Herzstück der App. Wähle eine Disziplin, um sie zu bearbeiten, oder erstelle eine komplett neue.</p>
+                <ul>
+                    <li><strong>Bedeutung der Felder:</strong>
+                        <ul>
+                            <li><strong>Beschreibung:</strong> Name/Anweisung für die Phase. Zeilenumbrüche (`\n`) werden korrekt dargestellt.</li>
+                            <li><strong>Vorlaufzeit:</strong> Vorbereitungszeit vor dem Startsignal.</li>
+                            <li><strong>Dauer:</strong> Hauptzeit der Übung.</li>
+                            <li><strong>Wiederholungen:</strong> Wie oft die Phase wiederholt wird.</li>
+                            <li><strong>Pause zw. Wdh.:</strong> Pause zwischen den Wiederholungen.</li>
+                            <li><strong>Ton am Anfang / Ende:</strong> Steuert die akustischen Signale.</li>
+                            <li><strong>Pause nach Phase:</strong> Erzwingt einen manuellen Stopp nach der Phase, bevor die nächste beginnt.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
 
-            <h3>4. Der Disziplin-Editor: Eigene Abläufe erstellen</h3>
-            <p>Hier liegt das Herzstück der App. Wenn du eine Disziplin aus der Liste auswählst, wird sie im Editor geladen. Du kannst aber auch eine komplett neue erstellen.</p>
+            <section class="card">
+                <h3>Tipp: App auf dem Smartphone installieren</h3>
+                <p>Diese Webseite ist eine Progressive Web App (PWA). Du kannst sie auf deinem Startbildschirm ablegen, um sie wie eine normale App zu nutzen – auch offline.</p>
+            </section>
+        </div>
+
+        <div id="en">
+            <h2 id="manual-en">User Manual (English)</h2>
+            <p class="text-slate-600" style="margin-top: -1rem; margin-bottom: 2rem;"><strong>Note:</strong> The application interface is in German. This manual explains the function of the German UI elements.</p>
             
-            <h4>Phasen bearbeiten & verwalten</h4>
-            <ul>
-                <li><strong>Bearbeiten:</strong> Klicke direkt auf den Text einer Phase, um sie im "Phase bearbeiten"-Fenster anzupassen.</li>
-                <li><strong>Verschieben:</strong> Nutze die Pfeil-Knöpfe (▲/▼) rechts, um die Reihenfolge der Phasen zu ändern.</li>
-                <li><strong>Duplizieren (❐):</strong> Erstellt eine Kopie einer Phase direkt darunter.</li>
-                <li><strong>Löschen (❌):</strong> Entfernt eine Phase.</li>
-            </ul>
+            <section class="card">
+                <h3>Introduction</h3>
+                <p>Welcome to the eXen-Timer! This timer was developed to help you control and manage timings for the dynamic shooting disciplines of the German BDMP federation.</p>
+            </section>
 
-            <h4>Bedeutung der Felder für eine Phase</h4>
-            <ul>
-                <li><strong>Beschreibung:</strong> Der Name oder die Anweisung für die Phase. Zeilenumbrüche werden im Timer korrekt dargestellt.</li>
-                <li><strong>Vorlaufzeit (s):</strong> Eine Vorbereitungszeit in Sekunden, bevor die eigentliche Dauer startet (z. B. für das Kommando "Fertig?").</li>
-                <li><strong>Dauer (s):</strong> Die Hauptzeit der Übung in Sekunden.</li>
-                <li><strong>Wiederholungen:</strong> Wie oft diese Phase hintereinander ausgeführt werden soll.</li>
-                <li><strong>Pause zw. Wdh. (s):</strong> Eine kurze Pause in Sekunden zwischen den einzelnen Wiederholungen.</li>
-                <li><strong>Ton am Anfang / Ende:</strong> Legt fest, ob zu Beginn oder am Ende der Dauer (oder beidem) ein Signalton ertönen soll.</li>
-                <li><strong>Pause nach Phase:</strong> Wenn aktiviert, stoppt der Timer nach dieser Phase und wartet auf eine manuelle Bestätigung ("Weiter"-Knopf).</li>
-            </ul>
-        </section>
+            <section class="card">
+                <h3>The Timer View (`Timer`)</h3>
+                <p>This is your command center at the shooting range, intentionally kept minimalistic for fast and error-free operation.</p>
+                
+                <h4>1. Running a Discipline</h4>
+                <ol>
+                    <li><strong>Load Discipline:</strong> First, switch to the `Admin` view. Select a discipline from the list and click the blue `Laden` (Load) button. The app will automatically switch back.</li>
+                    <li><strong>Start Sequence:</strong> Click the large green `Start` button.</li>
+                    <li><strong>Pauses & Next Stage:</strong> If a stage has the "Pause nachher" (Pause after) option enabled, the timer will stop and show a blue `Weiter` (Continue) button, which prepares the next stage.</li>
+                    <li><strong>Reset:</strong> The red `Reset` button immediately stops the entire sequence and resets the discipline to the beginning.</li>
+                </ol>
 
-        <section id="pwa-tipp" class="card">
-            <h2>Tipp: App auf dem Smartphone installieren</h2>
-            <p>Diese Webseite ist eine Progressive Web App (PWA). Du kannst sie direkt auf den Startbildschirm deines Geräts legen, um sie wie eine native App zu starten – inklusive Offline-Fähigkeit.</p>
-            <ul>
-                <li><strong>iPhone/iPad (Safari):</strong> Öffne die Webseite, tippe auf das "Teilen"-Symbol und wähle "Zum Home-Bildschirm".</li>
-                <li><strong>Android (Chrome):</strong> Öffne die Webseite, tippe auf das Menü (drei Punkte) und wähle "App installieren" oder "Zum Startbildschirm hinzufügen".</li>
-            </ul>
-        </section>
+                <h4>2. Training Individual Stages</h4>
+                <p>In the stage list below the timer, click the Play icon (▶) next to any exercise to jump directly to it for isolated practice.</p>
+            </section>
+            
+            <section class="card">
+                <h3>The Admin View (`Admin`)</h3>
+                <p>This is where you manage your content. You can edit disciplines, create new ones, and import/export them.</p>
+
+                <h4>1. Discipline Management</h4>
+                <ul>
+                    <li><strong>`Laden` (Load):</strong> Transfers the selected discipline to the Timer view, making it ready to start.</li>
+                    <li><strong>`Kopieren` (Copy):</strong> Copies the selected discipline's data as text to your clipboard.</li>
+                    <li><strong>`Löschen` (Delete):</strong> Permanently removes the selected discipline from your device's storage.</li>
+                </ul>
+
+                <h4>2. Share / Backup Collection</h4>
+                <ul>
+                    <li><strong>`Sammlung kopieren` (Copy Collection):</strong> Copies **all** of your disciplines for a complete backup.</li>
+                    <li><strong>`Aus Text einfügen` (Paste from Text):</strong> Imports previously copied disciplines.</li>
+                </ul>
+
+                <h4>3. Load Default Set</h4>
+                <p>Clicking <span class="button-like bg-green">BDMP-Standard laden</span> (Load BDMP Standard) loads a curated list of disciplines from the server, overwriting existing ones with the same name.</p>
+
+                <h4>4. The Discipline Editor</h4>
+                <p>This is the core of the app. Select a discipline to edit it, or create a new one from scratch.</p>
+                <ul>
+                    <li><strong>Field Descriptions:</strong>
+                        <ul>
+                            <li><strong>`Beschreibung` (Description):</strong> Name/instruction for the stage. Line breaks (`\n`) are rendered correctly.</li>
+                            <li><strong>`Vorlaufzeit` (Prep Time):</strong> Preparation time before the start signal.</li>
+                            <li><strong>`Dauer` (Duration):</strong> The main time for the exercise.</li>
+                            <li><strong>`Wiederholungen` (Repetitions):</strong> How many times the stage is repeated.</li>
+                            <li><strong>`Pause zw. Wdh.` (Pause between Reps):</strong> A short pause between repetitions.</li>
+                            <li><strong>`Ton am Anfang / Ende` (Sound at Start / End):</strong> Controls the acoustic signals.</li>
+                            <li><strong>`Pause nach Phase` (Pause after Stage):</strong> Forces a manual stop after the stage before the next one begins.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <h3>Tip: Install the App on Your Smartphone</h3>
+                <p>This website is a Progressive Web App (PWA). You can add it to your home screen to use it like a native app, including offline functionality.</p>
+            </section>
+        </div>
 
         <footer class="text-center mt-8 text-slate-500">
-            <p>Ich wünsche dir viel Spaß und Gut Schuss!</p>
+            <a href="index.html">&laquo; Zurück zum Timer / Back to Timer</a>
         </footer>
     </div>
-
 </body>
 </html>
