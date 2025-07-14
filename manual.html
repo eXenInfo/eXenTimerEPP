@@ -6,104 +6,81 @@
     <title>Benutzerhandbuch: eXen-Timer</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Zusätzliche Stile für die interaktiven Elemente des Handbuchs */
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
-        }
-        .accordion-content.open {
-            max-height: 1000px; /* Ausreichend Platz für den Inhalt */
-        }
-        .accordion-arrow {
-            transition: transform 0.3s ease-in-out;
-        }
-        .accordion-arrow.open {
-            transform: rotate(90deg);
-        }
+        /* Manuelles Hinzufügen einiger grundlegender Stile, falls 'prose' nicht ausreicht */
+        body { background-color: #f5f5f4; }
+        h1, h2, h3 { font-weight: bold; }
+        h1 { font-size: 1.875rem; margin-bottom: 1rem; }
+        h2 { font-size: 1.5rem; margin-bottom: 1rem; margin-top: 2rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;}
+        h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+        p, ul, ol { margin-bottom: 1rem; line-height: 1.6; }
+        ul, ol { padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        a { color: #2563eb; }
+        a:hover { text-decoration: underline; }
+        strong { font-weight: bold; }
+        .container { max-width: 800px; margin: auto; padding: 2rem; }
+        .card { background-color: white; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; }
     </style>
 </head>
 <body class="bg-stone-100 text-stone-800">
 
-    <div class="max-w-7xl mx-auto">
-        <div class="lg:flex">
-            <aside class="lg:w-64 lg:fixed lg:h-screen p-6 border-b lg:border-b-0 lg:border-r border-stone-200 bg-white">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <h1 class="text-xl font-bold text-stone-900">eXen-Timer</h1>
-                </div>
-                <nav id="desktop-nav">
-                    <ul class="space-y-2">
-                        <li><a href="#einfuehrung" class="nav-link flex items-center gap-3 px-3 py-2 text-stone-600 hover:bg-amber-100 hover:text-amber-800 rounded-md transition-colors">Einführung</a></li>
-                        <li><a href="#uebersicht" class="nav-link flex items-center gap-3 px-3 py-2 text-stone-600 hover:bg-amber-100 hover:text-amber-800 rounded-md transition-colors">Übersicht</a></li>
-                        <li><a href="#timer-ansicht" class="nav-link flex items-center gap-3 px-3 py-2 text-stone-600 hover:bg-amber-100 hover:text-amber-800 rounded-md transition-colors">Timer-Ansicht</a></li>
-                        <li><a href="#admin-ansicht" class="nav-link flex items-center gap-3 px-3 py-2 text-stone-600 hover:bg-amber-100 hover:text-amber-800 rounded-md transition-colors">Admin-Ansicht</a></li>
-                        <li><a href="#smartphone-tipp" class="nav-link flex items-center gap-3 px-3 py-2 text-stone-600 hover:bg-amber-100 hover:text-amber-800 rounded-md transition-colors">Smartphone Tipp</a></li>
-                        <li class="pt-4"><a href="index.html" class="nav-link flex items-center gap-3 px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-md transition-colors">« Zurück zum Timer</a></li>
-                    </ul>
-                </nav>
-            </aside>
+    <div class="container">
+        <header class="text-center mb-8">
+            <h1 class="text-stone-900">Benutzerhandbuch: eXen-Timer</h1>
+            <p class="text-lg text-stone-600">Eine vollständige Anleitung zur Nutzung aller Funktionen.</p>
+            <a href="index.html" class="text-blue-600">&laquo; Zurück zum Timer</a>
+        </header>
 
-            <main class="lg:ml-64 p-6 md:p-10">
-                <section id="einfuehrung" class="mb-16">
-                    <h2 class="text-3xl font-bold text-stone-900 mb-4">Benutzerhandbuch: eXen-Timer</h2>
-                    <p class="text-lg text-stone-600 max-w-3xl">
-                        Herzlich willkommen zum eXen-Timer! Dieser Timer wurde entwickelt, um dir das Training und die Durchführung der dynamischen BDMP-Disziplinen zu vereinfachen. Dieses Handbuch erklärt dir alle Funktionen der App.
-                    </p>
-                </section>
+        <main>
+            <section id="einfuehrung" class="card">
+                <h2>Einführung</h2>
+                <p>Herzlich willkommen zum eXen-Timer! Dieser Timer wurde entwickelt, um dir das Training und die Durchführung der dynamischen BDMP-Disziplinen zu vereinfachen.</p>
+            </section>
 
-                <section id="uebersicht" class="mb-16">
-                    <h2 class="text-2xl font-bold text-stone-900 mb-6">Übersicht: Die drei Bereiche der App</h2>
-                    </section>
+            <section id="timer-ansicht" class="card">
+                <h2>Die Timer-Ansicht</h2>
+                <p>Die Timer-Ansicht ist bewusst einfach gehalten, um am Schießstand eine schnelle und fehlerfreie Bedienung zu gewährleisten.</p>
+                <h3>1. Disziplin vorbereiten</h3>
+                <ol>
+                    <li>Wechsle zur <strong>Admin</strong>-Ansicht.</li>
+                    <li>Wähle die gewünschte Disziplin aus der Dropdown-Liste.</li>
+                    <li>Klicke auf den blauen Knopf <strong>"Laden"</strong>. Die App wechselt automatisch zur Timer-Ansicht.</li>
+                </ol>
+                <h3>2. Ablauf starten und steuern</h3>
+                 <ul>
+                    <li><strong>Starten:</strong> Klicke auf den grünen <strong>Start</strong>-Knopf.</li>
+                    <li><strong>Pausieren:</strong> Wenn eine Pause nach einer Phase aktiviert ist, erscheint ein <strong>Weiter</strong>-Knopf.</li>
+                    <li><strong>Abbrechen:</strong> Mit dem roten <strong>Reset</strong>-Knopf kann der laufende Ablauf jederzeit abgebrochen und auf den Anfang zurückgesetzt werden.</li>
+                </ul>
+            </section>
+            
+            <section id="admin-ansicht" class="card">
+                <h2>Die Admin-Ansicht</h2>
+                <p>Hier verwaltest du alles: Du erstellst neue Disziplinen, bearbeitest bestehende und teilst deine Abläufe mit anderen Schützen.</p>
+                <h3>Der Disziplin-Editor</h3>
+                <ul>
+                    <li><strong>Bearbeiten:</strong> Klicke auf den Text einer Phase, um sie zu bearbeiten.</li>
+                    <li><strong>Reihenfolge ändern:</strong> Nutze die Pfeil-Knöpfe (▲/▼).</li>
+                    <li><strong>Duplizieren/Löschen:</strong> Nutze die entsprechenden Symbole rechts neben jeder Phase.</li>
+                </ul>
+                <h3>Import & Export</h3>
+                <p>Nutze die Kopieren- und Einfügen-Buttons, um deine Disziplin-Sammlung als Text zu sichern oder von anderen zu importieren.</p>
+            </section>
 
-                <section id="timer-ansicht" class="mb-16">
-                    <h2 class="text-2xl font-bold text-stone-900 mb-2">Die Timer-Ansicht</h2>
-                    <div class="space-y-4">
-                        <div class="accordion-item bg-white border border-stone-200 rounded-xl">
-                            <button class="accordion-header w-full flex justify-between items-center p-5 text-left">
-                                <span class="font-semibold text-lg">1. Disziplin für den Timer vorbereiten</span>
-                                <span class="accordion-arrow text-amber-500">▶</span>
-                            </button>
-                            <div class="accordion-content px-5 pb-5">
-                                </div>
-                        </div>
-                        </div>
-                </section>
-                
-                </main>
-        </div>
+            <section id="smartphone-tipp" class="card">
+                <h2>Tipp für Smartphone-Nutzer</h2>
+                <p>Füge die App zu deinem Startbildschirm hinzu, um sie wie eine native App schnell und auch offline nutzen zu können.</p>
+                <ul>
+                    <li><strong>iPhone (Safari):</strong> "Teilen"-Symbol &rarr; "Zum Home-Bildschirm".</li>
+                    <li><strong>Android (Chrome):</strong> Menü (drei Punkte) &rarr; "Zum Startbildschirm hinzufügen".</li>
+                </ul>
+            </section>
+        </main>
+        
+        <footer class="text-center mt-8 text-stone-500">
+            <p>Viel Erfolg und Gut Schuss!</p>
+        </footer>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // JavaScript für das Akkordeon-Menü
-            const accordionItems = document.querySelectorAll('.accordion-item');
-            accordionItems.forEach(item => {
-                const header = item.querySelector('.accordion-header');
-                header.addEventListener('click', () => {
-                    const content = item.querySelector('.accordion-content');
-                    const arrow = item.querySelector('.accordion-arrow');
-                    content.classList.toggle('open');
-                    arrow.classList.toggle('open');
-                });
-            });
-
-            // JavaScript für Smooth-Scrolling bei Klick auf Navigationslinks
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                    if (href.startsWith('#')) {
-                        e.preventDefault();
-                        document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>
