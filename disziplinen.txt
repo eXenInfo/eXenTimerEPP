@@ -1,0 +1,76 @@
+{
+  "NPA A-B-OS Standard": [
+    {
+      "name": "Stage 1 - 25 Meter\n6 Schuss in 15 Sekunden auf die linke Scheibe.\nIst jemand nicht fertig? - ACHTUNG!",
+      "prepTime": 3,
+      "duration": 15,
+      "repetitions": 1,
+      "pauseDuration": 0,
+      "soundAtStart": true,
+      "soundAtEnd": true,
+      "pauseAfter": true
+    },
+    {
+      "name": "Stage 2 - 20 Meter\n6 Schuss in 10 Sekunden davon 3 auf jede Scheibe.\nIst jemand nicht fertig? - ACHTUNG!",
+      "prepTime": 3,
+      "duration": 10,
+      "repetitions": 1,
+      "pauseDuration": 0,
+      "soundAtStart": true,
+      "soundAtEnd": true,
+      "pauseAfter": true
+    },
+    {
+      "name": "Stage 3 - 15 Meter\n2 Schuss in 3 Sekunden mit 3 Wiederholungen auf die rechte Scheibe.\nIst jemand nicht fertig? - ACHTUNG!",
+      "prepTime": 3,
+      "duration": 3,
+      "repetitions": 3,
+      "pauseDuration": 7,
+      "soundAtStart": true,
+      "soundAtEnd": true,
+      "pauseAfter": true
+    },
+    {
+      "name": "Stage 4 - 10 Meter\n6 Schuss in 6 Sekunden davon 3 auf jede Scheibe.\nIst jemand nicht fertig? - ACHTUNG!",
+      "prepTime": 3,
+      "duration": 6,
+      "repetitions": 1,
+      "pauseDuration": 0,
+      "soundAtStart": true,
+      "soundAtEnd": true,
+      "pauseAfter": false
+    }
+  ],
+  "Police Pistol 2 (PP2)": [
+    {
+      "name": "Station A: 10m\n2x 6 Schuss in 5 Sekunden",
+      "prepTime": 5,
+      "duration": 5,
+      "repetitions": 2,
+      "pauseDuration": 10,
+      "soundAtStart": true,
+      "soundAtEnd": true,
+      "pauseAfter": true
+    },
+    {
+      "name": "Station B: 50m\n24 Schuss in 3 Minuten",
+      "prepTime": 5,
+      "duration": 180,
+      "repetitions": 1,
+      "pauseDuration": 0,
+      "soundAtStart": true,
+      "soundAtEnd": true,
+      "pauseAfter": true
+    },
+    {
+      "name": "Station C: 25m\n24 Schuss in 2 Minuten",
+      "prepTime": 5,
+      "duration": 120,
+      "repetitions": 1,
+      "pauseDuration": 0,
+      "soundAtStart": true,
+      "soundAtEnd": true,
+      "pauseAfter": false
+    }
+  ]
+}
