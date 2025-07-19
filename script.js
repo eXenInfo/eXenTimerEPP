@@ -117,11 +117,18 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         try {
-            const soundSynth = new Tone.Synth({
-                oscillator: { type: "fatsquare", count: 3, spread: 40 },
-                envelope: { attack: 0.01, decay: 0.1, sustain: 0.5, release: 0.2 }
+// originalcode			
+ //           const soundSynth = new Tone.Synth({
+ //               oscillator: { type: "fatsquare", count: 3, spread: 40 },
+ //              envelope: { attack: 0.01, decay: 0.1, sustain: 0.5, release: 0.2 }
+ //           }).toDestination();
+// edit Andreas Ton 880hz, mit schärferer Rechteckfunktion
+			const soundSynth = new Tone.Synth({
+                oscillator: { type: "square", count: 16, volume : -0.1},
+                envelope: { attack: 0.002, decay: 0.025, sustain: 1, release: 0.01 }
             }).toDestination();
             soundSynth.triggerAttackRelease("A5", "0.5"); 
+// end edit Andreas			
             setTimeout(() => { if(soundSynth) soundSynth.dispose(); }, 700);
         } catch (e) {
             console.error("Failed to play sound:", e);
@@ -766,3 +773,4 @@ document.addEventListener('DOMContentLoaded', () => {
         renderAdminStagesList();
     }
 });
+
